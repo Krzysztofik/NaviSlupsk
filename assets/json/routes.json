@@ -1,0 +1,45 @@
+[
+    {
+      "name": "Ścieżka Gryfitów",
+      "imagePath": "assets/images/zdj1.jpg"
+    },
+    {
+      "name": "Ścieżka Kościołów",
+      "imagePath": "assets/images/zdj2.jpg",
+      "points": [
+        {
+          "latitude": 54.464229,
+          "longitude": 17.033650
+        },
+        {
+          "latitude": 54.465833,
+          "longitude": 17.037500
+        },
+        {
+          "latitude": 54.468562,
+          "longitude": 17.031379
+        },
+        {
+          "latitude": 54.463215,
+          "longitude": 17.033298
+        },
+        {
+          "latitude": 54.461994,
+          "longitude": 17.032425
+        },
+        {
+          "latitude": 54.469140,
+          "longitude": 17.040522
+        }
+      ]
+    },
+    {
+      "name": "Ścieżka Gotyku Ceglanego",
+      "imagePath": "assets/images/zdj3.jpg"
+    },
+    {
+      "name": "Ścieżka Pomników",
+      "imagePath": "assets/images/zdj4.jpg"
+    }
+]
+  
