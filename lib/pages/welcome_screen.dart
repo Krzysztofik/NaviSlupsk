@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
 
-class App4Slupsk extends StatelessWidget {
-  const App4Slupsk({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
-//Ekran startowy, imitacja App4Slupsk menu z kafelkami.
+//Ekran startowy
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'App4Słupsk',
+          'Aplikacja nawigacyjna audio',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -19,8 +19,7 @@ class App4Slupsk extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.anchor_sharp),
           color: Colors.black,
-          onPressed: () {
-          },
+          onPressed: () {},
         ),
       ),
       body: Center(
@@ -29,7 +28,7 @@ class App4Slupsk extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const MapScreen()),
-              );
+            );
           },
           child: const Text('Do mapy'),
         ),

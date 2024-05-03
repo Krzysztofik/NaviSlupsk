@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_app/pages/app4slupsk.dart';
+import 'package:google_maps_app/pages/welcome_screen.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMapIconPressed;
   final VoidCallback onListIconPressed;
 
   const MyAppBar({
-    Key? key, 
+    Key? key,
     required this.onMapIconPressed,
     required this.onListIconPressed,
   }) : super(key: key);
@@ -29,16 +29,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const App4Slupsk()),
+            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
           );
         },
       ),
       title: const Text(
         'Trasy audio',
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold
-          ),
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
       actions: [
         Row(
