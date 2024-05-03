@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
 class BottomMenu extends StatefulWidget {
-  const BottomMenu({super.key});
+  const BottomMenu({Key? key}) : super(key: key);
 
   @override
   State<BottomMenu> createState() => _BottomMenuState();
@@ -10,16 +10,36 @@ class BottomMenu extends StatefulWidget {
 
 class _BottomMenuState extends State<BottomMenu> {
   List<RouteModel> menus = [];
+  final PageController _pageController = PageController(viewportFraction: 0.6);
 
   @override
   void initState() {
     super.initState();
     _loadRoutes();
+    _pageController.addListener(_onPageChanged);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadRoutes() async {
-    menus = await RouteModel.getRoutes();
-    setState(() {}); // Odśwież
+    RouteModel.getRoutes().then((loadedRoutes) {
+      setState(() {
+        menus = loadedRoutes;
+      });
+    });
+  }
+
+  void _onPageChanged() {
+    final double currentPage = _pageController.page ?? 0;
+    final int roundedPage = currentPage.round();
+
+    if ((currentPage - roundedPage).abs() < 0.01) {
+      print("Wyśrodkowano!");
+    }
   }
 
   @override
@@ -31,9 +51,7 @@ class _BottomMenuState extends State<BottomMenu> {
         child: PageView.builder(
           itemCount: menus.length,
           scrollDirection: Axis.horizontal,
-          controller: PageController(
-            viewportFraction: 250 / MediaQuery.of(context).size.width,
-          ),
+          controller: _pageController,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(
@@ -58,8 +76,6 @@ class _BottomMenuState extends State<BottomMenu> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-
-                    //Obrazek w kontenerze
                     SizedBox(
                       width: double.infinity,
                       height: 3 / 5 * 250,
@@ -74,8 +90,6 @@ class _BottomMenuState extends State<BottomMenu> {
                         ),
                       ),
                     ),
-
-                    //Tekst pod obrazkiem
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 8,
@@ -90,8 +104,6 @@ class _BottomMenuState extends State<BottomMenu> {
                         ),
                       ),
                     ),
-
-                    //Przycisk 'Szczegóły' pod nazwą ścieżki.
                     Row(
                       children: [
                         Padding(
@@ -111,7 +123,7 @@ class _BottomMenuState extends State<BottomMenu> {
                                 minimumSize: const Size(220,35),
                               ),
                               child: const Text(
-                                'Więcej szczegółów',
+                                'Pokaż miejsca',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
