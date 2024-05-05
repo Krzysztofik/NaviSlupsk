@@ -4,7 +4,6 @@ import 'package:google_maps_app/ui/app_bar.dart';
 import 'package:google_maps_app/ui/bottom_menu.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/services/marker_maker.dart';
-import 'package:google_maps_app/services/route_maker.dart';
 
 enum ScreenState {Map,RouteList}
 ScreenState _currentScreenState = ScreenState.Map;
@@ -27,9 +26,6 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    loadRoutes().then((_) {
-      setState(() {}); // Odśwież
-    });
     loadMarkers().then((_) {
       setState(() {}); // Odśwież
     });
@@ -47,7 +43,6 @@ class _MapScreenState extends State<MapScreen> {
               zoom: 14.0,
             ),
             markers: buildMarkers(),
-            // polylines: Set<Polyline>.of(polylines.values),
           ),
         ),
         const BottomMenu(),
