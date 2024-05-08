@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_app/models/marker_model.dart';
+import 'package:google_maps_app/models/route_model.dart';
 
 //Logika tworzenia markerów.
 
 late BitmapDescriptor customIcon;
-List<MarkerModel> markers = [];
+List<PointModel> markers = [];
 
 Future<void> loadMarkers() async {
   final icon = await BitmapDescriptor.fromAssetImage(
@@ -13,7 +13,9 @@ Future<void> loadMarkers() async {
     'assets/images/marker.png',
   );
   customIcon = icon;
-  markers = await MarkerModel.getMarkers();
+
+  final routes = await RouteModel.getRoutes();
+  markers = routes.fold<List<PointModel>>([], (list, route) => list..addAll(route.points));
 }
 
 Set<Marker> buildMarkers() {

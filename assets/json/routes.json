@@ -2,8 +2,23 @@
   {
     "id": 1,
     "name": "Ścieżka Gryfitów",
-    "imagePath": "assets/images/zdj1.jpg"
+    "imagePath": "assets/images/zdj1.jpg",
+    "points": [
+      {
+        "id": 7,
+        "name": "Point 7",
+        "latitude": 54.464824,
+        "longitude": 17.035492
+      },
+      {
+        "id": 8,
+        "name": "Point 8",
+        "latitude": 54.463754,
+        "longitude": 17.032365
+      }
+    ]
   },
+
   {
     "id": 2,
     "name": "Ścieżka Kościołów",

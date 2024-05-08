@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
@@ -34,11 +36,12 @@ class _BottomMenuState extends State<BottomMenu> {
   }
 
   void _onPageChanged() {
-    final double currentPage = _pageController.page ?? 0;
+    final double currentPage = _pageController.page?? 0;
     final int roundedPage = currentPage.round();
 
     if ((currentPage - roundedPage).abs() < 0.01) {
-      print("Wyśrodkowano!");
+      final RouteModel currentRoute = menus[roundedPage];
+      print("Wyśrodkowano element id${currentRoute.id} o nazwie ${currentRoute.name}");
     }
   }
 
@@ -120,7 +123,7 @@ class _BottomMenuState extends State<BottomMenu> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                minimumSize: const Size(220,35),
+                                minimumSize: const Size(220, 35),
                               ),
                               child: const Text(
                                 'Pokaż miejsca',
