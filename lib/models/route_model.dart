@@ -1,13 +1,28 @@
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
-// Load route information and create a route model based on a JSON file.
+class PointModel {
+  final int id;
+  final String name;
+  final double latitude;
+  final double longitude;
+
+  const PointModel({
+    required this.id,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+  });
+}
+
 class RouteModel {
+  final int id;
   final String name;
   final String imagePath;
-  final List<Map<String, double>> points;
+  final List<PointModel> points;
 
   const RouteModel({
+    required this.id,
     required this.name,
     required this.imagePath,
     required this.points,
@@ -21,18 +36,23 @@ class RouteModel {
       final List<RouteModel> routes = [];
 
       for (var item in jsonData) {
-        final List<Map<String, double>> pointsList = [];
+        final List<PointModel> pointsList = [];
         if (item['points']!= null) {
           for (var point in item['points']) {
-            pointsList.add({
-              'latitude': point['latitude'].toDouble(),
-              'longitude': point['longitude'].toDouble(),
-            });
+            pointsList.add(
+              PointModel(
+                id: point['id'],
+                name: point['name'],
+                latitude: point['latitude'].toDouble(),
+                longitude: point['longitude'].toDouble(),
+              ),
+            );
           }
         }
 
         routes.add(
           RouteModel(
+            id: item['id'],
             name: item['name'],
             imagePath: item['imagePath'],
             points: pointsList,
@@ -42,11 +62,11 @@ class RouteModel {
 
       // Print all route information to the console
       for (var route in routes) {
-        print('Route: ${route.name}');
+        print('Route: ${route.id} - ${route.name}');
         print('  Image Path: ${route.imagePath}');
         print('  Points:');
         for (var point in route.points) {
-          print('    Latitude: ${point['latitude']}, Longitude: ${point['longitude']}');
+          print('    ${point.id} - ${point.name}: Latitude: ${point.latitude}, Longitude: ${point.longitude}');
         }
       }
 
