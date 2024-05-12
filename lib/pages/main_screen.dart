@@ -1,11 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api, constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/ui/app_bar.dart';
 import 'package:google_maps_app/ui/bottom_menu.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/services/marker_maker.dart';
+import 'package:google_maps_app/models/route_model.dart';
 
-enum ScreenState {Map,RouteList}
+enum ScreenState { Map, RouteList }
 ScreenState _currentScreenState = ScreenState.Map;
 late GoogleMapController mapController;
 const LatLng _slupskCenter = LatLng(54.4643, 17.0282); //Koordynaty centrum Słupska.
@@ -22,15 +22,23 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  int centeredRouteId = 0; // Dodaj zmienną przechowującą identyfikator wyśrodkowanej trasy
 
   @override
-  void initState() {
-    super.initState();
-    loadMarkers().then((_) {
-      setState(() {}); // Odśwież
-    });
-  }
-
+void initState() {
+  super.initState();
+  loadMarkers().then((_) {
+    setState(() {}); // Odśwież
+  });
+  RouteModel.getRoutes().then((routes) {
+    if (routes.isNotEmpty) {
+      setState(() {
+        // Ustaw domyślnie identyfikator pierwszej trasy
+        centeredRouteId = routes.first.id;
+      });
+    }
+  });
+}
   //Builder google mapy.
   Widget _buildMap() {
     return Column(
@@ -42,10 +50,10 @@ class _MapScreenState extends State<MapScreen> {
               target: _slupskCenter,
               zoom: 14.0,
             ),
-            markers: buildMarkers(),
+            markers: buildMarkers(centeredRouteId), // Użyj zaktualizowanej funkcji buildMarkers() z przekazanym identyfikatorem wyśrodkowanej trasy
           ),
         ),
-        const BottomMenu(),
+        BottomMenu(onPageChanged: onPageChanged), // Dodaj bottom menu
       ],
     );
   }
@@ -88,5 +96,17 @@ class _MapScreenState extends State<MapScreen> {
         style: TextStyle(fontSize: 24),
       ),
     );
+  }
+
+  // Metoda do odświeżania widoku mapy po zmianie trasy
+  void refreshMap() {
+    setState(() {}); // Odśwież
+  }
+
+  // Metoda do obsługi zmiany trasy w bottom menu
+  void onPageChanged(int routeId) {
+    setState(() {
+      centeredRouteId = routeId; // Zaktualizuj identyfikator wyśrodkowanej trasy
+    });
   }
 }

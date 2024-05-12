@@ -1,10 +1,9 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
 class BottomMenu extends StatefulWidget {
-  const BottomMenu({Key? key}) : super(key: key);
+  final void Function(int) onPageChanged; // Dodaj funkcję do przekazywania zmiany strony
+  const BottomMenu({Key? key, required this.onPageChanged}) : super(key: key);
 
   @override
   State<BottomMenu> createState() => _BottomMenuState();
@@ -36,12 +35,14 @@ class _BottomMenuState extends State<BottomMenu> {
   }
 
   void _onPageChanged() {
-    final double currentPage = _pageController.page?? 0;
+    final double currentPage = _pageController.page ?? 0;
     final int roundedPage = currentPage.round();
 
     if ((currentPage - roundedPage).abs() < 0.01) {
       final RouteModel currentRoute = menus[roundedPage];
       print("Wyśrodkowano element id${currentRoute.id} o nazwie ${currentRoute.name}");
+
+      widget.onPageChanged(currentRoute.id); // Zaktualizuj id trasy
     }
   }
 
@@ -103,7 +104,9 @@ class _BottomMenuState extends State<BottomMenu> {
                         child: Text(
                           menus[index].name,
                           style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -118,8 +121,7 @@ class _BottomMenuState extends State<BottomMenu> {
                             child: ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromRGBO(77, 182, 172, 1),
+                                backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),

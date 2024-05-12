@@ -7,12 +7,14 @@ class PointModel {
   final String name;
   final double latitude;
   final double longitude;
+  final int routeId;
 
   const PointModel({
     required this.id,
     required this.name,
     required this.latitude,
     required this.longitude,
+    required this.routeId,
   });
 }
 
@@ -46,6 +48,7 @@ class RouteModel {
                 name: point['name'],
                 latitude: point['latitude'].toDouble(),
                 longitude: point['longitude'].toDouble(),
+                routeId: point['routeId'],
               ),
             );
           }

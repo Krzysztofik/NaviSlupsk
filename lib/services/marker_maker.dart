@@ -18,8 +18,11 @@ Future<void> loadMarkers() async {
   markers = routes.fold<List<PointModel>>([], (list, route) => list..addAll(route.points));
 }
 
-Set<Marker> buildMarkers() {
-  return markers.map((marker) {
+Set<Marker> buildMarkers(int centeredRouteId) {
+  // Filtrowanie punktów dla wyśrodkowanej trasy
+  List<PointModel> centeredPoints = markers.where((point) => point.routeId == centeredRouteId).toList();
+
+  return centeredPoints.map((marker) {
     return Marker(
       markerId: MarkerId(marker.name),
       position: LatLng(marker.latitude, marker.longitude),

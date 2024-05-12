@@ -8,13 +8,15 @@
         "id": 7,
         "name": "Point 7",
         "latitude": 54.464824,
-        "longitude": 17.035492
+        "longitude": 17.035492,
+        "routeId": 1
       },
       {
         "id": 8,
         "name": "Point 8",
         "latitude": 54.463754,
-        "longitude": 17.032365
+        "longitude": 17.032365,
+        "routeId": 1
       }
     ]
   },
@@ -28,44 +30,66 @@
         "id": 1,
         "name": "Point 1",
         "latitude": 54.464229,
-        "longitude": 17.033650
+        "longitude": 17.033650,
+        "routeId": 2
       },
       {
         "id": 2,
         "name": "Point 2",
         "latitude": 54.465833,
-        "longitude": 17.037500
+        "longitude": 17.037500,
+        "routeId": 2
       },
       {
         "id": 3,
         "name": "Point 3",
         "latitude": 54.468562,
-        "longitude": 17.031379
+        "longitude": 17.031379,
+        "routeId": 2
       },
       {
         "id": 4,
         "name": "Point 4",
         "latitude": 54.463215,
-        "longitude": 17.033298
+        "longitude": 17.033298,
+        "routeId": 2
       },
       {
         "id": 5,
         "name": "Point 5",
         "latitude": 54.461994,
-        "longitude": 17.032425
+        "longitude": 17.032425,
+        "routeId": 2
       },
       {
         "id": 6,
         "name": "Point 6",
         "latitude": 54.469140,
-        "longitude": 17.040522
+        "longitude": 17.040522,
+        "routeId": 2
       }
     ]
   },
   {
     "id": 3,
     "name": "Ścieżka Gotyku Ceglanego",
-    "imagePath": "assets/images/zdj3.jpg"
+    "imagePath": "assets/images/zdj3.jpg",
+    "points": [
+      {
+        "id": 9,
+        "name": "Point 1",
+        "latitude": 54.464229,
+        "longitude": 17.033650,
+        "routeId": 3
+      },
+      {
+        "id": 10,
+        "name": "Point 2",
+        "latitude": 54.465833,
+        "longitude": 17.037500,
+        "routeId": 3
+      }
+    ]
   },
   {
     "id": 4,
