@@ -22,7 +22,6 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  
 
   @override
   void initState() {
