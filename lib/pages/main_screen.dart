@@ -49,17 +49,18 @@ void initState() {
 }
 
 Future<void> _requestLocationPermission() async {
-    final permissionStatus = await Permission.location.request();
-    if (permissionStatus == PermissionStatus.granted) {
-      setState(() {
-        _locationPermissionGranted = true;
-      });
-    } else {
-      setState(() {
-        _locationPermissionGranted = false;
-      });
-    }
+  final permissionStatus = await Permission.location.request();
+  if (permissionStatus == PermissionStatus.granted) {
+    setState(() {
+      _locationPermissionGranted = true;
+      _getCurrentLocation();
+    });
+  } else {
+    setState(() {
+      _locationPermissionGranted = false;
+    });
   }
+}
 
   Future<void> _getCurrentLocation() async {
     if (_locationPermissionGranted) {
@@ -75,16 +76,53 @@ Future<void> _requestLocationPermission() async {
  Widget _buildMap() {
   return Stack(
     children: [
-      Expanded(
-        child: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: const CameraPosition(
-            target: _slupskCenter,
-            zoom: 14.0,
-          ),
-          markers: buildMarkers(centeredRouteId),
-          myLocationEnabled: _locationPermissionGranted,
-          myLocationButtonEnabled: _locationPermissionGranted,
+      GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: const CameraPosition(
+          target: _slupskCenter,
+          zoom: 14.0,
+        ),
+        markers: {
+          ...buildMarkers(centeredRouteId),
+          if (_currentUserLocation != null)
+            UserLocationMarker(
+              position: LatLng(
+                _currentUserLocation!.latitude,
+                _currentUserLocation!.longitude,
+              ),
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+            ),
+        },
+      ),
+      Positioned(
+        top: 16,
+        left: 16,
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          alignment: WrapAlignment.start,
+          children: [
+            FloatingActionButton(
+              onPressed: _centerMapOnUserLocation,
+              child: const Icon(Icons.my_location),
+              backgroundColor: Color.fromRGBO(77, 182, 172, 1),
+            ),
+            FloatingActionButton(
+              onPressed: toggleBottomMenu,
+              child: Icon(_isBottomMenuVisible ? Icons.arrow_upward : Icons.arrow_downward),
+              backgroundColor: Color.fromRGBO(77, 182, 172, 1),
+            ),
+            FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.add),
+              backgroundColor: Color.fromRGBO(77, 182, 172, 1),
+            ),
+            FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.pedal_bike),
+              backgroundColor: Color.fromRGBO(77, 182, 172, 1),
+            ),
+          ],
         ),
       ),
       Positioned(
@@ -102,28 +140,36 @@ Future<void> _requestLocationPermission() async {
 
   //Główny Scaffold aplikacji.
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        onMapIconPressed: () {
-          setState(() {
-            _currentScreenState = ScreenState.mapState;
-          });
-        },
-        onListIconPressed: () {
-          setState(() {
-            _currentScreenState = ScreenState.routeListState;
-          });
-        },
-      ),
-      body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: toggleBottomMenu,
-        child: Icon(_isBottomMenuVisible ? Icons.arrow_upward : Icons.arrow_downward),
-      ),
-    );
-  }
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: MyAppBar(
+      onMapIconPressed: () {
+        setState(() {
+          _currentScreenState = ScreenState.mapState;
+        });
+      },
+      onListIconPressed: () {
+        setState(() {
+          _currentScreenState = ScreenState.routeListState;
+        });
+      },
+    ),
+    body: _buildBody(),
+  );
+}
 
+Future<void> _centerMapOnUserLocation() async {
+  if (_locationPermissionGranted && _currentUserLocation != null) {
+    final cameraPosition = CameraPosition(
+      target: LatLng(
+        _currentUserLocation!.latitude,
+        _currentUserLocation!.longitude,
+      ),
+      zoom: 14.0,
+    );
+    mapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
+}
   //Builder body
   Widget _buildBody() {
     switch (_currentScreenState) {
@@ -162,6 +208,3 @@ Future<void> _requestLocationPermission() async {
     });
   }
 }
-
-
-

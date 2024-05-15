@@ -33,3 +33,17 @@ Set<Marker> buildMarkers(int centeredRouteId) {
     );
   }).toSet();
 }
+
+class UserLocationMarker extends Marker {
+  UserLocationMarker({
+    required LatLng position,
+    required BitmapDescriptor icon,
+  }) : super(
+          markerId: MarkerId('user_location'),
+          position: position,
+          icon: icon,
+          infoWindow: InfoWindow(
+            title: 'Your Location',
+          ),
+        );
+}
