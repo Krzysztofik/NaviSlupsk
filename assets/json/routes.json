@@ -28,42 +28,49 @@
     "points": [
       {
         "id": 1,
-        "name": "Point 1",
+        "name": "Kościół Mariacki i krzywa wieża",
         "latitude": 54.464229,
         "longitude": 17.033650,
         "routeId": 2
       },
       {
         "id": 2,
-        "name": "Point 2",
+        "name": "Kościół św. Jacka",
+        "latitude": 54.464229,
+        "longitude": 17.033650,
+        "routeId": 2
+      },
+      {
+        "id": 3,
+        "name": "Kościół św. Ottona",
         "latitude": 54.465833,
         "longitude": 17.037500,
         "routeId": 2
       },
       {
-        "id": 3,
-        "name": "Point 3",
+        "id": 4,
+        "name": "Kościół św. Mikołaja i Biblioteka Miejska",
         "latitude": 54.468562,
         "longitude": 17.031379,
         "routeId": 2
       },
       {
-        "id": 4,
-        "name": "Point 4",
+        "id": 5,
+        "name": "Kaplica św. Jerzego",
         "latitude": 54.463215,
         "longitude": 17.033298,
         "routeId": 2
       },
       {
-        "id": 5,
-        "name": "Point 5",
+        "id": 6,
+        "name": "Kościół Ewangelicki św. Krzyża",
         "latitude": 54.461994,
         "longitude": 17.032425,
         "routeId": 2
       },
       {
-        "id": 6,
-        "name": "Point 6",
+        "id": 7,
+        "name": "Kościół Najświętszego Serca Jezusowego",
         "latitude": 54.469140,
         "longitude": 17.040522,
         "routeId": 2

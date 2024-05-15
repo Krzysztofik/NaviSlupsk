@@ -65,41 +65,6 @@
     "longitude": 17.034008
   },
   {
-    "name": "Kościół Mariacki i krzywa wieża",
-    "latitude": 54.464229,
-    "longitude": 17.033650
-  },
-  {
-    "name": "Kościół św. Jacka",
-    "latitude": 54.464229,
-    "longitude": 17.033650
-  },
-  {
-    "name": "Kościół św. Ottona",
-    "latitude": 54.465833,
-    "longitude": 17.037500
-  },
-  {
-    "name": "Kościół św. Mikołaja i Biblioteka Miejska",
-    "latitude": 54.468562,
-    "longitude": 17.031379
-  },
-  {
-    "name": "Kaplica św. Jerzego",
-    "latitude": 54.463215,
-    "longitude": 17.033298
-  },
-  {
-    "name": "Kościół Ewangelicki św. Krzyża",
-    "latitude": 54.461994,
-    "longitude": 17.032425
-  },
-  {
-    "name": "Kościół Najświętszego Serca Jezusowego",
-    "latitude": 54.469140,
-    "longitude": 17.040522
-  },
-  {
     "name": "Budynek poczty i Heinrich von Stephan",
     "latitude": 54.465344,
     "longitude": 17.030341
@@ -149,8 +114,6 @@
     "latitude": 54.465538,
     "longitude": 17.026545
   }
-
-
 ]
 
   

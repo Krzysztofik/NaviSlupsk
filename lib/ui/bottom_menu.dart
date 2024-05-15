@@ -3,7 +3,8 @@ import 'package:google_maps_app/models/route_model.dart';
 
 class BottomMenu extends StatefulWidget {
   final void Function(int) onPageChanged; // Dodaj funkcję do przekazywania zmiany strony
-  const BottomMenu({Key? key, required this.onPageChanged}) : super(key: key);
+  final bool isVisible;
+  const BottomMenu({Key? key, required this.onPageChanged, this.isVisible = true}) : super(key: key);
 
   @override
   State<BottomMenu> createState() => _BottomMenuState();
@@ -40,7 +41,6 @@ class _BottomMenuState extends State<BottomMenu> {
 
     if ((currentPage - roundedPage).abs() < 0.01) {
       final RouteModel currentRoute = menus[roundedPage];
-      print("Wyśrodkowano element id${currentRoute.id} o nazwie ${currentRoute.name}");
 
       widget.onPageChanged(currentRoute.id); // Zaktualizuj id trasy
     }
@@ -48,7 +48,9 @@ class _BottomMenuState extends State<BottomMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return AnimatedSlide(
+      offset: widget.isVisible ? Offset.zero : const Offset (0,1),
+      duration: const Duration(milliseconds: 500),
       child: Container(
         color: Colors.white,
         height: 254,
