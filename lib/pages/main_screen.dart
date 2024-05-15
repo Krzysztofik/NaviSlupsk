@@ -71,6 +71,63 @@ Future<void> _requestLocationPermission() async {
     }
   }
 
+List<Polyline> _buildPolylines() {
+  final polylines = <Polyline>[];
+
+  // Get the current route points
+  final routePoints = markers.where((point) => point.routeId == centeredRouteId).toList();
+
+  // Add polyline from user location to the nearest marker
+  if (_currentUserLocation != null) {
+    final nearestMarker = routePoints.reduce((a, b) {
+      final distanceA = Geolocator.distanceBetween(
+        _currentUserLocation!.latitude,
+        _currentUserLocation!.longitude,
+        a.latitude,
+        a.longitude,
+      );
+      final distanceB = Geolocator.distanceBetween(
+        _currentUserLocation!.latitude,
+        _currentUserLocation!.longitude,
+        b.latitude,
+        b.longitude,
+      );
+      return distanceA < distanceB ? a : b;
+    });
+    polylines.add(
+      Polyline(
+        polylineId: PolylineId('user_to_nearest'),
+        points: [
+          LatLng(_currentUserLocation!.latitude, _currentUserLocation!.longitude),
+          LatLng(nearestMarker.latitude, nearestMarker.longitude),
+        ],
+        color: Colors.blue,
+        width: 5,
+      ),
+    );
+  }
+
+  // Add polylines between markers
+  for (int i = 0; i < routePoints.length - 1; i++) {
+    final pointA = routePoints[i];
+    final pointB = routePoints[i + 1];
+    polylines.add(
+      Polyline(
+        polylineId: PolylineId('marker_${i}_to_${i + 1}'),
+        points: [
+          LatLng(pointA.latitude, pointA.longitude),
+          LatLng(pointB.latitude, pointB.longitude),
+        ],
+        color: Colors.blue,
+        width: 5,
+      ),
+    );
+  }
+
+  return polylines;
+}
+
+
   
   //Builder google mapy.
  Widget _buildMap() {
@@ -93,6 +150,7 @@ Future<void> _requestLocationPermission() async {
               icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
             ),
         },
+        polylines: _buildPolylines().toSet(),
       ),
       Positioned(
         top: 16,

@@ -101,6 +101,29 @@
   {
     "id": 4,
     "name": "Ścieżka Pomników",
-    "imagePath": "assets/images/zdj4.jpg"
+    "imagePath": "assets/images/zdj4.jpg",
+    "points": [
+      {
+        "id": 11,
+        "name": "Brama Młyńska",
+        "latitude": 54.464458,
+        "longitude": 17.035191,
+        "routeId": 4
+      },
+      {
+        "id": 12,
+        "name": "Młyn Zamkowy",
+        "latitude": 54.464192,
+        "longitude": 17.034394,
+        "routeId": 4
+      },
+      {
+        "id": 13,
+        "name": "Zamek Książąt Pomorskich",
+        "latitude": 54.464047,
+        "longitude": 17.034339,
+        "routeId": 4
+      }
+    ]
   }
 ]
