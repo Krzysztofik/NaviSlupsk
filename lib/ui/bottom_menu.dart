@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
+import 'package:google_maps_app/pages/route_list_screen.dart';
 
 class BottomMenu extends StatefulWidget {
-  final void Function(int) onPageChanged; // Dodaj funkcję do przekazywania zmiany strony
+  final void Function(int) onPageChanged;
   final bool isVisible;
   const BottomMenu({Key? key, required this.onPageChanged, this.isVisible = true}) : super(key: key);
 
@@ -13,6 +14,7 @@ class BottomMenu extends StatefulWidget {
 class _BottomMenuState extends State<BottomMenu> {
   List<RouteModel> menus = [];
   final PageController _pageController = PageController(viewportFraction: 0.6);
+  int _currentRouteId = 0; // Zmienna do przechowywania aktualnie wybranej trasy
 
   @override
   void initState() {
@@ -41,15 +43,28 @@ class _BottomMenuState extends State<BottomMenu> {
 
     if ((currentPage - roundedPage).abs() < 0.01) {
       final RouteModel currentRoute = menus[roundedPage];
-
-      widget.onPageChanged(currentRoute.id); // Zaktualizuj id trasy
+      _currentRouteId = currentRoute.id; // Aktualizacja ID bieżącej trasy
+      widget.onPageChanged(currentRoute.id); 
     }
+  }
+
+  // Funkcja nawigująca do RouteListScreen z odpowiednim routeId
+  void showRouteDetails(int routeId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RouteListScreen(
+          routes: menus,
+          initialRouteId: routeId, // Przekazujemy routeId do RouteListScreen
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSlide(
-      offset: widget.isVisible ? Offset.zero : const Offset (0,1),
+      offset: widget.isVisible ? Offset.zero : const Offset(0, 1),
       duration: const Duration(milliseconds: 500),
       child: Container(
         color: Colors.white,
@@ -60,10 +75,7 @@ class _BottomMenuState extends State<BottomMenu> {
           controller: _pageController,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(
-                top: 8,
-                bottom: 8,
-              ),
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: Container(
                 width: 250,
                 margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -97,10 +109,7 @@ class _BottomMenuState extends State<BottomMenu> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                        left: 8,
-                      ),
+                      padding: const EdgeInsets.only(top: 8, left: 8),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -115,13 +124,13 @@ class _BottomMenuState extends State<BottomMenu> {
                     Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                            left: 8,
-                          ),
+                          padding: const EdgeInsets.only(left: 8),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showRouteDetails(_currentRouteId); // Na naciśnięcie przekazujemy id
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
                                 shape: RoundedRectangleBorder(
