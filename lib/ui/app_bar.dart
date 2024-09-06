@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_app/pages/welcome_screen.dart';
-import 'package:google_maps_app/models/route_model.dart';
-import 'package:google_maps_app/pages/route_list_screen.dart';
+import 'package:google_maps_app/pages/main_screen.dart'; // Dodaj import dla ScreenState, jeśli to osobny plik
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMapIconPressed;
   final VoidCallback onListIconPressed;
+  final ScreenState currentScreenState; // Dodajemy parametr do śledzenia stanu
 
   const MyAppBar({
     Key? key,
     required this.onMapIconPressed,
     required this.onListIconPressed,
+    required this.currentScreenState, // Otrzymujemy stan ekranu
   }) : super(key: key);
 
   @override
@@ -25,16 +25,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         systemNavigationBarColor: Colors.white,
       ),
       backgroundColor: Colors.white,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        color: Colors.black,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-          );
-        },
-      ),
       title: const Text(
         'Trasy audio',
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -43,13 +33,25 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.menu),
-              color: Colors.black,
+              icon: Icon(
+                currentScreenState == ScreenState.routeListState
+                    ? Icons.view_list_rounded
+                    : Icons.view_list_outlined,
+              ),
+              color: currentScreenState == ScreenState.routeListState
+                  ? Color.fromRGBO(77, 182, 172, 1)
+                  : Colors.black,
               onPressed: onListIconPressed,
             ),
             IconButton(
-              icon: const Icon(Icons.place),
-              color: Colors.black,
+              icon: Icon(
+                currentScreenState == ScreenState.mapState
+                    ? Icons.place_rounded
+                    : Icons.place_outlined,
+              ),
+              color: currentScreenState == ScreenState.mapState
+                  ? Color.fromRGBO(77, 182, 172, 1)
+                  : Colors.black,
               onPressed: onMapIconPressed,
             ),
           ],

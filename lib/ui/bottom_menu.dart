@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:google_maps_app/pages/route_list_screen.dart';
 
+
 class BottomMenu extends StatefulWidget {
   final void Function(int) onPageChanged;
   final bool isVisible;
-  const BottomMenu({Key? key, required this.onPageChanged, this.isVisible = true}) : super(key: key);
+  final VoidCallback onHideInfoWindow;
+
+  const BottomMenu({
+    Key? key,
+    required this.onPageChanged,
+    this.isVisible = true,
+    required this.onHideInfoWindow,
+  }) : super(key: key);
 
   @override
   State<BottomMenu> createState() => _BottomMenuState();
@@ -14,7 +22,7 @@ class BottomMenu extends StatefulWidget {
 class _BottomMenuState extends State<BottomMenu> {
   List<RouteModel> menus = [];
   final PageController _pageController = PageController(viewportFraction: 0.6);
-  int _currentRouteId = 0; // Zmienna do przechowywania aktualnie wybranej trasy
+  int _currentRouteId = 0;
 
   @override
   void initState() {
@@ -43,22 +51,9 @@ class _BottomMenuState extends State<BottomMenu> {
 
     if ((currentPage - roundedPage).abs() < 0.01) {
       final RouteModel currentRoute = menus[roundedPage];
-      _currentRouteId = currentRoute.id; // Aktualizacja ID bieżącej trasy
-      widget.onPageChanged(currentRoute.id); 
+      _currentRouteId = currentRoute.id;
+      widget.onPageChanged(currentRoute.id);
     }
-  }
-
-  // Funkcja nawigująca do RouteListScreen z odpowiednim routeId
-  void showRouteDetails(int routeId) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RouteListScreen(
-          routes: menus,
-          initialRouteId: routeId, // Przekazujemy routeId do RouteListScreen
-        ),
-      ),
-    );
   }
 
   @override
@@ -129,7 +124,7 @@ class _BottomMenuState extends State<BottomMenu> {
                             alignment: Alignment.centerLeft,
                             child: ElevatedButton(
                               onPressed: () {
-                                showRouteDetails(_currentRouteId); // Na naciśnięcie przekazujemy id
+                                showRouteDetails(_currentRouteId);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
@@ -155,6 +150,21 @@ class _BottomMenuState extends State<BottomMenu> {
               ),
             );
           },
+          onPageChanged: (index) {
+            widget.onHideInfoWindow();
+          },
+        ),
+      ),
+    );
+  }
+
+  void showRouteDetails(int routeId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RouteListScreen(
+          routes: menus,
+          initialRouteId: routeId,
         ),
       ),
     );

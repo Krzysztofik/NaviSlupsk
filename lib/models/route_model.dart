@@ -8,6 +8,8 @@ class PointModel {
   final double latitude;
   final double longitude;
   final int routeId;
+  final String? imagePath;
+  final String? description;
 
   const PointModel({
     required this.id,
@@ -15,6 +17,8 @@ class PointModel {
     required this.latitude,
     required this.longitude,
     required this.routeId,
+    this.imagePath,
+    this.description,
   });
 }
 
@@ -49,6 +53,8 @@ class RouteModel {
                 latitude: point['latitude'].toDouble(),
                 longitude: point['longitude'].toDouble(),
                 routeId: point['routeId'],
+                imagePath: point['imagePath'],
+                description: point['description'],
               ),
             );
           }
@@ -62,16 +68,6 @@ class RouteModel {
             points: pointsList,
           ),
         );
-      }
-
-      // Print all route information to the console
-      for (var route in routes) {
-        print('Route: ${route.id} - ${route.name}');
-        print('  Image Path: ${route.imagePath}');
-        print('  Points:');
-        for (var point in route.points) {
-          print('    ${point.id} - ${point.name}: Latitude: ${point.latitude}, Longitude: ${point.longitude}');
-        }
       }
 
       return routes;

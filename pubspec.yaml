@@ -2,7 +2,7 @@ name: google_maps_app
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: ">=3.0.5 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -42,10 +41,20 @@ dependencies:
   riverpod: ^2.5.0
   flutter_animate: ^4.5.0
   http: ^1.1.0
+  google_directions_api: ^0.10.0
+  dio: ^5.7.0
+  custom_info_window: ^1.0.1
+  audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo512.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -59,7 +68,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -68,9 +76,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/sounds/
     - assets/json/routes.json
     - assets/json/markers.json
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -84,19 +92,18 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Oyko
-       fonts:
-         - asset: assets/fonts/Oyko-Bold.ttf
-         - asset: assets/fonts/Oyko-BoldItalic.ttf
-         - asset: assets/fonts/Oyko-ExtraBold.ttf
-         - asset: assets/fonts/Oyko-ExtraBoldItalic.ttf
-         - asset: assets/fonts/Oyko-Italic.ttf
-         - asset: assets/fonts/Oyko-Light.ttf
-         - asset: assets/fonts/Oyko-LightItalic.ttf
-         - asset: assets/fonts/Oyko-Medium.ttf
-         - asset: assets/fonts/Oyko-MediumItalic.ttf
-         - asset: assets/fonts/Oyko-Regular.ttf
-
+    - family: Oyko
+      fonts:
+        - asset: assets/fonts/Oyko-Bold.ttf
+        - asset: assets/fonts/Oyko-BoldItalic.ttf
+        - asset: assets/fonts/Oyko-ExtraBold.ttf
+        - asset: assets/fonts/Oyko-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Oyko-Italic.ttf
+        - asset: assets/fonts/Oyko-Light.ttf
+        - asset: assets/fonts/Oyko-LightItalic.ttf
+        - asset: assets/fonts/Oyko-Medium.ttf
+        - asset: assets/fonts/Oyko-MediumItalic.ttf
+        - asset: assets/fonts/Oyko-Regular.ttf
 
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
