@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:google_maps_app/pages/route_list_screen.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomMenu extends StatefulWidget {
   final void Function(int) onPageChanged;
@@ -133,8 +133,8 @@ class _BottomMenuState extends State<BottomMenu> {
                                 ),
                                 minimumSize: const Size(220, 35),
                               ),
-                              child: const Text(
-                                'Pokaż miejsca',
+                              child: Text(
+                                AppLocalizations.of(context)!.showPlaces,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,

@@ -84,6 +84,7 @@ class RouteListScreen extends StatelessWidget {
                         // Wyświetl szczegółowy opis w modalnym oknie
                         showModalBottomSheet(
                           context: context,
+                          isScrollControlled: true,
                           builder: (BuildContext context) {
                             return Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -109,9 +110,9 @@ class RouteListScreen extends StatelessWidget {
                                     style: TextStyle(fontSize: 16),
                                   ),
                                   const SizedBox(height: 10),
-                                  if (point.description != null)
+                                  if (point.longDescription != null)
                                     Text(
-                                      point.description!,
+                                      point.longDescription!,
                                       style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                                     ),
                                   const SizedBox(height: 20),
@@ -119,6 +120,9 @@ class RouteListScreen extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context); // Zamknij modalne okno
                                     },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color.fromRGBO(77, 182, 172, 1),
+                                    ),
                                     child: const Text('Zamknij'),
                                   ),
                                 ],

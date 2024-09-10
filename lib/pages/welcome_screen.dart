@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -86,8 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   Widget _buildLanguageButton(String label, String flagAsset, VoidCallback onPressed) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        primary: Colors.white, // Kolor tła
-        onPrimary: Colors.black, // Kolor tekstu
+        foregroundColor: Colors.black, backgroundColor: Colors.white, // Kolor tekstu
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -132,8 +132,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                         ),
                         const SizedBox(height: 20),
                         // Tekst
-                        const Text(
-                          'NaviSłupsk',
+                        Text(
+                          AppLocalizations.of(context)!.appName,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,

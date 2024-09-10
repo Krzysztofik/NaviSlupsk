@@ -1,0 +1,16 @@
+{
+  "appName": "Nawigacja Słupsk",
+  "@appName": {
+    "description": "Tytuł aplikacji"
+  },
+
+  "routesTitle": "Trasy audio",
+  "@routesTitle": {
+    "description": "Tytuł ekranu mapy"
+  },
+
+  "showPlaces": "Pokaż miejsca",
+  "@showPlaces": {
+    "description": "Przycisk pokaż miejsca"
+  }
+}

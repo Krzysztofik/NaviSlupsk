@@ -10,6 +10,7 @@ class PointModel {
   final int routeId;
   final String? imagePath;
   final String? description;
+  final String? longDescription;
 
   const PointModel({
     required this.id,
@@ -19,6 +20,7 @@ class PointModel {
     required this.routeId,
     this.imagePath,
     this.description,
+    this.longDescription,
   });
 }
 
@@ -55,6 +57,7 @@ class RouteModel {
                 routeId: point['routeId'],
                 imagePath: point['imagePath'],
                 description: point['description'],
+                longDescription: point['longDescription'],
               ),
             );
           }

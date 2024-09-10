@@ -10,7 +10,8 @@
         "latitude": 54.464824,
         "longitude": 17.035492,
         "routeId": 1,
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 1. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 1. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       },
       {
         "id": 2,
@@ -18,7 +19,8 @@
         "latitude": 54.463754,
         "longitude": 17.032365,
         "routeId": 1,
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
     ]
   },
@@ -35,7 +37,8 @@
         "longitude": 17.033650,
         "routeId": 2,
         "imagePath": "assets/images/kosciolswjacka.jpg",
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 3. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 3. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       },
       {
         "id": 4,
@@ -44,7 +47,8 @@
         "longitude": 17.037500,
         "routeId": 2,
         "imagePath": "assets/images/kosciolswottona.jpg",
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 4. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 4. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       },
       {
         "id": 5,
@@ -53,7 +57,8 @@
         "longitude": 17.033298,
         "routeId": 2,
         "imagePath": "assets/images/kaplicaswjerzego.jpg",
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 5. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 5. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
     ]
   },
@@ -68,7 +73,8 @@
         "latitude": 54.464229,
         "longitude": 17.033650,
         "routeId": 3,
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 6. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 6. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       },
       {
         "id": 7,
@@ -76,7 +82,8 @@
         "latitude": 54.465833,
         "longitude": 17.037500,
         "routeId": 3,
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 7. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 7. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
     ]
   },
@@ -92,7 +99,8 @@
         "longitude": 17.035191,
         "routeId": 4,
         "imagePath": "assets/images/bramamlynska.jpg",
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 8. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 8. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       },
       {
         "id": 9,
@@ -101,7 +109,8 @@
         "longitude": 17.034394,
         "routeId": 4,
         "imagePath": "assets/images/mlynzamkowy.JPG",
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 9. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 9. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       },
       {
         "id": 10,
@@ -110,7 +119,8 @@
         "longitude": 17.034339,
         "routeId": 4,
         "imagePath": "assets/images/zamekksiazatpomorskich.JPG",
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 10. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON."
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 10. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
     ]
   }

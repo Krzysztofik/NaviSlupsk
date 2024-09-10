@@ -45,6 +45,9 @@ dependencies:
   dio: ^5.7.0
   custom_info_window: ^1.0.1
   audioplayers: ^5.2.1
+  flutter_localizations:
+    sdk: flutter
+  intl: 0.18.0
 
 dev_dependencies:
   flutter_test:
@@ -72,12 +75,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
     - assets/sounds/
     - assets/json/routes.json
+    - assets/json/routes_en.json
     - assets/json/markers.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

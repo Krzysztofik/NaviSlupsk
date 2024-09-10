@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_app/pages/main_screen.dart'; // Dodaj import dla ScreenState, jeśli to osobny plik
+import 'package:google_maps_app/pages/main_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMapIconPressed;
@@ -25,8 +26,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         systemNavigationBarColor: Colors.white,
       ),
       backgroundColor: Colors.white,
-      title: const Text(
-        'Trasy audio',
+      title: Text(
+        AppLocalizations.of(context)!.routesTitle,
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
       actions: [
