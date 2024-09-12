@@ -20,7 +20,7 @@ class PointModel {
     required this.routeId,
     this.imagePath,
     this.description,
-    this.longDescription,
+    this.longDescription, 
   });
 }
 

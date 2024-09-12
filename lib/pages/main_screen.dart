@@ -10,13 +10,6 @@ import 'package:google_maps_app/pages/route_list_screen.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 
 enum ScreenState { mapState, routeListState }
-ScreenState _currentScreenState = ScreenState.mapState;
-late GoogleMapController mapController;
-const LatLng _slupskCenter = LatLng(54.4643, 17.0282); // Koordynaty centrum Słupska.
-
-void _onMapCreated(GoogleMapController controller) {
-  mapController = controller;
-}
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -26,13 +19,15 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMixin {
-  int centeredRouteId = 0; 
+  ScreenState _currentScreenState = ScreenState.mapState;
+  late GoogleMapController _mapController;
+  int _centeredRouteId = 0; 
   bool _locationPermissionGranted = false;
   Position? _currentUserLocation;
   bool _isBottomMenuVisible = true;
   bool _isSoundEnabled = true;
   late AnimationController _animationController;
-  List<RouteModel> routes = [];
+  List<RouteModel> _routes = [];
   CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
 
   @override
@@ -45,8 +40,8 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
     RouteModel.getRoutes().then((loadedRoutes) {
       if (loadedRoutes.isNotEmpty) {
         setState(() {
-          routes = loadedRoutes;
-          centeredRouteId = routes.first.id;
+          _routes = loadedRoutes;
+          _centeredRouteId = _routes.first.id;
         });
       }
     });
@@ -78,7 +73,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
   List<Polyline> _buildPolylines() {
     final polylines = <Polyline>[];
 
-    final routePoints = markers.where((point) => point.routeId == centeredRouteId).toList();
+    final routePoints = markers.where((point) => point.routeId == _centeredRouteId).toList();
 
     if (_currentUserLocation != null) {
       final nearestMarker = routePoints.reduce((a, b) {
@@ -129,85 +124,85 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
   }
 
   Widget _buildMap() {
-  return Stack(
-    children: [
-      GoogleMap(
-        onMapCreated: (GoogleMapController controller) {
-          _onMapCreated(controller);
-          _customInfoWindowController.googleMapController = controller;
-        },
-        initialCameraPosition: const CameraPosition(
-          target: _slupskCenter,
-          zoom: 14.0,
-        ),
-        markers: {
-          ...buildMarkers(centeredRouteId, _customInfoWindowController,),
-          if (_currentUserLocation != null)
-            Marker(
-              markerId: const MarkerId('user_location'),
-              position: LatLng(
-                _currentUserLocation!.latitude,
-                _currentUserLocation!.longitude,
+    return Stack(
+      children: [
+        GoogleMap(
+          onMapCreated: (GoogleMapController controller) {
+            _mapController = controller;
+            _customInfoWindowController.googleMapController = controller;
+          },
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(54.4643, 17.0282), // Koordynaty centrum Słupska.
+            zoom: 14.0,
+          ),
+          markers: {
+            ...buildMarkers(_centeredRouteId, _customInfoWindowController,),
+            if (_currentUserLocation != null)
+              Marker(
+                markerId: const MarkerId('user_location'),
+                position: LatLng(
+                  _currentUserLocation!.latitude,
+                  _currentUserLocation!.longitude,
+                ),
+                icon: userLocationIcon,
               ),
-              icon: userLocationIcon,
-            ),
-        },
-        polylines: _buildPolylines().toSet(),
-        onTap: (position) {
-          _customInfoWindowController.hideInfoWindow!();
-        },
-        onCameraMove: (position) {
-          _customInfoWindowController.onCameraMove!();
-        },
-      ),
-      CustomInfoWindow(
-        controller: _customInfoWindowController,
-        height: 204,
-        width: 300,
-      ),
-      AnimatedPositioned(
-        duration: const Duration(milliseconds: 500),
-        bottom: _isBottomMenuVisible ? 270 : 16,
-        left: 16,
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          alignment: WrapAlignment.start,
-          children: [
-            FloatingActionButton(
-              onPressed: _centerMapOnUserLocation,
-              child: const Icon(Icons.my_location),
-              backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
-            ),
-            FloatingActionButton(
-              onPressed: () {
-                toggleBottomMenu();
-                setState(() {});
-              },
-              child: Icon(_isBottomMenuVisible ? Icons.arrow_downward : Icons.arrow_upward),
-              backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
-            ),
-            FloatingActionButton(
-              onPressed: toggleSound,
-              child: Icon(_isSoundEnabled ? Icons.volume_up : Icons.volume_off),
-              backgroundColor: _isSoundEnabled ? Color.fromRGBO(77, 182, 172, 1) : Colors.grey,
-            ),
-          ],
+          },
+          polylines: _buildPolylines().toSet(),
+          onTap: (position) {
+            _customInfoWindowController.hideInfoWindow!();
+          },
+          onCameraMove: (position) {
+            _customInfoWindowController.onCameraMove!();
+          },
         ),
-      ),
-      Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: BottomMenu(
-          onPageChanged: onPageChanged,
-          isVisible: _isBottomMenuVisible,
-          onHideInfoWindow: _hideInfoWindow,
+        CustomInfoWindow(
+          controller: _customInfoWindowController,
+          height: 204,
+          width: 300,
         ),
-      ),
-    ],
-  );
-}
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 500),
+          bottom: _isBottomMenuVisible ? 270 : 16,
+          left: 16,
+          child: Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            alignment: WrapAlignment.start,
+            children: [
+              FloatingActionButton(
+                onPressed: _centerMapOnUserLocation,
+                child: const Icon(Icons.my_location),
+                backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
+              ),
+              FloatingActionButton(
+                onPressed: () {
+                  toggleBottomMenu();
+                  setState(() {});
+                },
+                child: Icon(_isBottomMenuVisible ? Icons.arrow_downward : Icons.arrow_upward),
+                backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
+              ),
+              FloatingActionButton(
+                onPressed: toggleSound,
+                child: Icon(_isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+                backgroundColor: _isSoundEnabled ? Color.fromRGBO(77, 182, 172, 1) : Colors.grey,
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: BottomMenu(
+            onPageChanged: onPageChanged,
+            isVisible: _isBottomMenuVisible,
+            onHideInfoWindow: _hideInfoWindow,
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +222,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
         },
         currentScreenState: _currentScreenState,
       ),
-      body: _buildBody(),
+      body: _currentScreenState == ScreenState.mapState ? _buildMap() : _buildRouteList(),
     );
   }
 
@@ -240,33 +235,20 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
         ),
         zoom: 14.0,
       );
-      mapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    }
-  }
-
-  Widget _buildBody() {
-    switch (_currentScreenState) {
-      case ScreenState.mapState:
-        return _buildMap();
-      case ScreenState.routeListState:
-        return _buildRouteList();
+      _mapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     }
   }
 
   Widget _buildRouteList() {
     return RouteListScreen(
-      routes: routes,
-      initialRouteId: centeredRouteId,
+      routes: _routes,
+      initialRouteId: _centeredRouteId,
     );
-  }
-
-  void refreshMap() {
-    setState(() {}); // Odśwież
   }
 
   void onPageChanged(int routeId) {
     setState(() {
-      centeredRouteId = routeId;
+      _centeredRouteId = routeId;
     });
   }
 
@@ -283,9 +265,8 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
   }
 
   void _hideInfoWindow() {
-  _customInfoWindowController.hideInfoWindow!();
-}
-
+    _customInfoWindowController.hideInfoWindow!();
+  }
 
   @override
   void dispose() {

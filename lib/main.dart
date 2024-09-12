@@ -14,14 +14,14 @@ class MyApp extends StatelessWidget {
       home: const WelcomeScreen(),
       debugShowCheckedModeBanner: false,
 
+      locale: Locale('pl'),
+
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
-      locale: Locale('en'),
 
       supportedLocales: [
         Locale('en'), //Angielski
@@ -30,3 +30,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

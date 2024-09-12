@@ -1,6 +1,7 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -133,7 +134,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                         const SizedBox(height: 20),
                         // Tekst
                         Text(
-                          AppLocalizations.of(context)!.appName,
+                          'NaviSłupsk',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
