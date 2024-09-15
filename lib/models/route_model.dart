@@ -11,8 +11,9 @@ class PointModel {
   final String? imagePath;
   final String? description;
   final String? longDescription;
+  bool isDiscovered;
 
-  const PointModel({
+  PointModel({
     required this.id,
     required this.name,
     required this.latitude,
@@ -21,6 +22,7 @@ class PointModel {
     this.imagePath,
     this.description,
     this.longDescription, 
+    this.isDiscovered = false
   });
 }
 

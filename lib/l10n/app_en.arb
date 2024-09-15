@@ -1,5 +1,6 @@
 {
     "appName": "Słupsk Navigation",
     "routesTitle": "Audio routes",
-    "showPlaces": "Show places"
+    "showPlaces": "Show places",
+    "navigate": "Navigate"
 }

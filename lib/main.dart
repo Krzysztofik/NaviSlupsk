@@ -4,6 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() => runApp(const MyApp());
 
+String getCurrentLanguageCode(BuildContext context) {
+  return Localizations.localeOf(context).languageCode;
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

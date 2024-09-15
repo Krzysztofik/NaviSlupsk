@@ -9,8 +9,13 @@
     "description": "Tytuł ekranu mapy"
   },
 
-  "showPlaces": "Pokaż miejsca",
+  "showPlaces": "Lista miejsc ",
   "@showPlaces": {
     "description": "Przycisk pokaż miejsca"
+  },
+
+  "navigate": "Nawiguj",
+  "@showPlaces": {
+    "description": "Przycisk nawiguj"
   }
 }

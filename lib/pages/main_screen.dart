@@ -1,13 +1,16 @@
+import 'dart:async'; // Dodaj import dla StreamSubscription
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/ui/app_bar.dart';
 import 'package:google_maps_app/ui/bottom_menu.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/services/marker_maker.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_maps_app/pages/route_list_screen.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:google_maps_app/services/polyline_maker.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 
 enum ScreenState { mapState, routeListState }
 
@@ -18,21 +21,37 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMixin {
+class _MapScreenState extends State<MapScreen>
+    with SingleTickerProviderStateMixin {
   ScreenState _currentScreenState = ScreenState.mapState;
   late GoogleMapController _mapController;
-  int _centeredRouteId = 0; 
+  int _centeredRouteId = 1;
+
+  String _navigationInfo = "";
+  StreamSubscription<CompassEvent>? _compassSubscription;
+
   bool _locationPermissionGranted = false;
   Position? _currentUserLocation;
+  StreamSubscription<Position>?
+      _positionStreamSubscription; // Stream lokalizacji
+
   bool _isBottomMenuVisible = true;
   bool _isSoundEnabled = true;
+
   late AnimationController _animationController;
+
   List<RouteModel> _routes = [];
-  CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
+  CustomInfoWindowController _customInfoWindowController =
+      CustomInfoWindowController();
+
+  Set<Polyline> _polylines = {};
+  late PolylineService _polylineService;
 
   @override
   void initState() {
     super.initState();
+    _polylineService =
+        PolylineService('AIzaSyBC9gtINw2qYfr-odHCe-lWBvBd4BuWYPc');
     _requestLocationPermission();
     loadMarkers().then((_) {
       setState(() {});
@@ -43,6 +62,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
           _routes = loadedRoutes;
           _centeredRouteId = _routes.first.id;
         });
+        _updateMarkerInfo();
       }
     });
   }
@@ -52,7 +72,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
     if (permissionStatus == PermissionStatus.granted) {
       setState(() {
         _locationPermissionGranted = true;
-        _getCurrentLocation();
+        _startLocationUpdates(); // Rozpocznij śledzenie lokalizacji
       });
     } else {
       setState(() {
@@ -61,66 +81,47 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
     }
   }
 
-  Future<void> _getCurrentLocation() async {
+  // Funkcja nasłuchująca na zmiany lokalizacji
+  Future<void> _startLocationUpdates() async {
     if (_locationPermissionGranted) {
-      final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      setState(() {
-        _currentUserLocation = position;
+      // Konfiguracja dla Androida
+      LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.high, // Ustawienie wysokiej dokładności
+        distanceFilter: 1, // Opcjonalne: aktualizuj lokalizację co 2 metry
+      );
+
+      _positionStreamSubscription =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen((Position position) {
+        setState(() {
+          _currentUserLocation = position;
+        });
+        _updatePolylines(); // Aktualizuj polilinie po zmianie lokalizacji
       });
     }
   }
 
-  List<Polyline> _buildPolylines() {
-    final polylines = <Polyline>[];
-
-    final routePoints = markers.where((point) => point.routeId == _centeredRouteId).toList();
-
+  Future<void> _updatePolylines() async {
     if (_currentUserLocation != null) {
-      final nearestMarker = routePoints.reduce((a, b) {
-        final distanceA = Geolocator.distanceBetween(
-          _currentUserLocation!.latitude,
-          _currentUserLocation!.longitude,
-          a.latitude,
-          a.longitude,
-        );
-        final distanceB = Geolocator.distanceBetween(
-          _currentUserLocation!.latitude,
-          _currentUserLocation!.longitude,
-          b.latitude,
-          b.longitude,
-        );
-        return distanceA < distanceB ? a : b;
-      });
-      polylines.add(
-        Polyline(
-          polylineId: const PolylineId('user_to_nearest'),
-          points: [
-            LatLng(_currentUserLocation!.latitude, _currentUserLocation!.longitude),
-            LatLng(nearestMarker.latitude, nearestMarker.longitude),
-          ],
-          color: Colors.blue,
-          width: 5,
-        ),
-      );
-    }
+      final routePoints =
+          markers.where((point) => point.routeId == _centeredRouteId).toList();
 
-    for (int i = 0; i < routePoints.length - 1; i++) {
-      final pointA = routePoints[i];
-      final pointB = routePoints[i + 1];
-      polylines.add(
-        Polyline(
-          polylineId: PolylineId('marker_${i}_to_${i + 1}'),
-          points: [
-            LatLng(pointA.latitude, pointA.longitude),
-            LatLng(pointB.latitude, pointB.longitude),
-          ],
-          color: Colors.blue,
-          width: 5,
-        ),
-      );
-    }
+      if (routePoints.isNotEmpty) {
+        final origin = LatLng(
+            _currentUserLocation!.latitude, _currentUserLocation!.longitude);
 
-    return polylines;
+        final allMarkers = [
+          origin,
+          ...routePoints
+              .map((marker) => LatLng(marker.latitude, marker.longitude))
+        ];
+
+        _polylines = await _polylineService.createPolylines(
+            _currentUserLocation!, allMarkers, _centeredRouteId);
+
+        setState(() {});
+      }
+    }
   }
 
   Widget _buildMap() {
@@ -130,13 +131,19 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
           onMapCreated: (GoogleMapController controller) {
             _mapController = controller;
             _customInfoWindowController.googleMapController = controller;
+            _updatePolylines(); // Wywołaj aktualizację polilinii po stworzeniu mapy
           },
           initialCameraPosition: const CameraPosition(
             target: LatLng(54.4643, 17.0282), // Koordynaty centrum Słupska.
             zoom: 14.0,
+            bearing: 0,
+            tilt: 0,
           ),
           markers: {
-            ...buildMarkers(_centeredRouteId, _customInfoWindowController,),
+            ...buildMarkers(
+              _centeredRouteId,
+              _customInfoWindowController,
+            ),
             if (_currentUserLocation != null)
               Marker(
                 markerId: const MarkerId('user_location'),
@@ -147,7 +154,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
                 icon: userLocationIcon,
               ),
           },
-          polylines: _buildPolylines().toSet(),
+          polylines: _polylines,
           onTap: (position) {
             _customInfoWindowController.hideInfoWindow!();
           },
@@ -179,13 +186,18 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
                   toggleBottomMenu();
                   setState(() {});
                 },
-                child: Icon(_isBottomMenuVisible ? Icons.arrow_downward : Icons.arrow_upward),
+                child: Icon(_isBottomMenuVisible
+                    ? Icons.arrow_downward
+                    : Icons.arrow_upward),
                 backgroundColor: const Color.fromRGBO(77, 182, 172, 1),
               ),
               FloatingActionButton(
                 onPressed: toggleSound,
-                child: Icon(_isSoundEnabled ? Icons.volume_up : Icons.volume_off),
-                backgroundColor: _isSoundEnabled ? Color.fromRGBO(77, 182, 172, 1) : Colors.grey,
+                child:
+                    Icon(_isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+                backgroundColor: _isSoundEnabled
+                    ? Color.fromRGBO(77, 182, 172, 1)
+                    : Colors.grey,
               ),
             ],
           ),
@@ -198,6 +210,24 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
             onPageChanged: onPageChanged,
             isVisible: _isBottomMenuVisible,
             onHideInfoWindow: _hideInfoWindow,
+            onNavigate: _navigate,
+            onMarkerInfoUpdate: _updateMarkerInfo,
+          ),
+        ),
+        Positioned(
+          top: 16,
+          left: 16,
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            color: Colors.black.withOpacity(0.5),
+            child: Text(
+              _navigationInfo,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ],
@@ -222,12 +252,15 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
         },
         currentScreenState: _currentScreenState,
       ),
-      body: _currentScreenState == ScreenState.mapState ? _buildMap() : _buildRouteList(),
+      body: _currentScreenState == ScreenState.mapState
+          ? _buildMap()
+          : _buildRouteList(),
     );
   }
 
   Future<void> _centerMapOnUserLocation() async {
     if (_locationPermissionGranted && _currentUserLocation != null) {
+      _compassSubscription?.cancel();
       final cameraPosition = CameraPosition(
         target: LatLng(
           _currentUserLocation!.latitude,
@@ -235,8 +268,89 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
         ),
         zoom: 14.0,
       );
-      _mapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+      _mapController
+          .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     }
+  }
+
+Future<void> _navigate() async {
+    if (_locationPermissionGranted && _currentUserLocation != null) {
+      // Zaktualizuj pozycję kamery z nowymi wartościami tilt i bearing
+      final CameraPosition initialPosition = CameraPosition(
+        target: LatLng(
+          _currentUserLocation!.latitude,
+          _currentUserLocation!.longitude,
+        ),
+        zoom: 24,  // Dostosuj zoom według potrzeb
+        tilt: 80,  // Dostosuj tilt według potrzeb
+      );
+
+      // Ustaw początkową pozycję kamery
+      await _mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(initialPosition),
+      );
+
+      // Subskrybuj zmiany kierunku z kompasu
+      final Stream<CompassEvent>? compassStream = FlutterCompass.events;
+      if (compassStream != null) {
+        _compassSubscription?.cancel(); // Anuluj poprzednią subskrypcję, jeśli istnieje
+        _compassSubscription = compassStream.listen(
+          (CompassEvent event) async {
+            final double? heading = event.heading;
+            if (heading != null) {
+              // Ustaw nową pozycję kamery
+              final CameraPosition updatedPosition = CameraPosition(
+                target: LatLng(
+                  _currentUserLocation!.latitude,
+                  _currentUserLocation!.longitude,
+                ),
+                zoom: 24,  // Dostosuj zoom według potrzeb
+                tilt: 80,  // Dostosuj tilt według potrzeb
+                bearing: heading,  // Ustaw bearing na wartość odczytu kompasu
+              );
+
+              // Animuj zoom w krótszym czasie
+              await _mapController?.animateCamera(
+                CameraUpdate.newCameraPosition(updatedPosition),
+              );
+            }
+          },
+          onError: (error) {
+            print('Error in compass stream: $error');
+          },
+          onDone: () {
+            print('Compass stream closed');
+          },
+        );
+      }
+    }
+  }
+
+  void _resetCameraToDefault() async {
+  if (_locationPermissionGranted && _currentUserLocation != null) {
+    final CameraPosition defaultPosition = CameraPosition(
+      target: LatLng(
+        _currentUserLocation!.latitude,
+        _currentUserLocation!.longitude,
+      ),
+      zoom: 14, // Przywróć do normalnego zoomu
+      tilt: 0,  // Przywróć do normalnego tilt
+      bearing: 0, // Przywróć do normalnego bearing
+    );
+
+    await _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(defaultPosition),
+    );
+  }
+}
+
+  void _updateMarkerInfo() {
+    final route = _routes.firstWhere((r) => r.id == _centeredRouteId);
+    final totalMarkers = route.points.length;
+
+    setState(() {
+      _navigationInfo = "${route.name}, odkryłeś 0/$totalMarkers obiektów!";
+    });
   }
 
   Widget _buildRouteList() {
@@ -250,6 +364,9 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
     setState(() {
       _centeredRouteId = routeId;
     });
+    _updatePolylines();
+    _compassSubscription?.cancel();
+    _resetCameraToDefault();
   }
 
   void toggleBottomMenu() {
@@ -270,6 +387,8 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
 
   @override
   void dispose() {
+    _positionStreamSubscription
+        ?.cancel(); // Zatrzymaj nasłuchiwanie lokalizacji
     _animationController.dispose();
     _customInfoWindowController.dispose();
     super.dispose();

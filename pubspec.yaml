@@ -48,6 +48,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: 0.18.0
+  shared_preferences: ^2.2.2
+  flutter_compass: ^0.8.0
 
 dev_dependencies:
   flutter_test:
