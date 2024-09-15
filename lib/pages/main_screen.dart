@@ -11,6 +11,7 @@ import 'package:google_maps_app/pages/route_list_screen.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:google_maps_app/services/polyline_maker.dart';
 import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ScreenState { mapState, routeListState }
 
@@ -37,6 +38,7 @@ class _MapScreenState extends State<MapScreen>
 
   bool _isBottomMenuVisible = true;
   bool _isSoundEnabled = true;
+  bool _isInfoVisible = false;
 
   late AnimationController _animationController;
 
@@ -215,21 +217,44 @@ class _MapScreenState extends State<MapScreen>
           ),
         ),
         Positioned(
-          top: 16,
-          left: 16,
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            color: Colors.black.withOpacity(0.5),
-            child: Text(
-              _navigationInfo,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+  top: 16,
+  left: 16,
+  child: _isInfoVisible ? Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+    decoration: BoxDecoration(
+      color: Colors.black.withOpacity(0.7),
+      borderRadius: BorderRadius.circular(12.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.4),
+          offset: Offset(0, 4),
+          blurRadius: 8.0,
+        ),
+      ],
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          Icons.navigation, // Dodaj ikonę lub inny widget według potrzeb
+          color: Colors.white,
+          size: 18,
+        ),
+        SizedBox(width: 8), // Odstęp między ikoną a tekstem
+        Text(
+          _navigationInfo,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
         ),
+      ],
+    ),
+  )
+  : Container(),
+),
+
       ],
     );
   }
@@ -270,6 +295,9 @@ class _MapScreenState extends State<MapScreen>
       );
       _mapController
           .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+          setState(() {
+      _isInfoVisible = false; // Ukryj kontener z informacjami
+    });
     }
   }
 
@@ -281,12 +309,12 @@ Future<void> _navigate() async {
           _currentUserLocation!.latitude,
           _currentUserLocation!.longitude,
         ),
-        zoom: 24,  // Dostosuj zoom według potrzeb
+        zoom: 20,  // Dostosuj zoom według potrzeb
         tilt: 80,  // Dostosuj tilt według potrzeb
       );
 
       // Ustaw początkową pozycję kamery
-      await _mapController?.animateCamera(
+      await _mapController.animateCamera(
         CameraUpdate.newCameraPosition(initialPosition),
       );
 
@@ -304,13 +332,13 @@ Future<void> _navigate() async {
                   _currentUserLocation!.latitude,
                   _currentUserLocation!.longitude,
                 ),
-                zoom: 24,  // Dostosuj zoom według potrzeb
+                zoom: 20,  // Dostosuj zoom według potrzeb
                 tilt: 80,  // Dostosuj tilt według potrzeb
                 bearing: heading,  // Ustaw bearing na wartość odczytu kompasu
               );
 
               // Animuj zoom w krótszym czasie
-              await _mapController?.animateCamera(
+              await _mapController.animateCamera(
                 CameraUpdate.newCameraPosition(updatedPosition),
               );
             }
@@ -323,25 +351,26 @@ Future<void> _navigate() async {
           },
         );
       }
+      setState(() {
+      _isInfoVisible = true; // Pokaż kontener z informacjami
+    });
     }
   }
 
   void _resetCameraToDefault() async {
-  if (_locationPermissionGranted && _currentUserLocation != null) {
     final CameraPosition defaultPosition = CameraPosition(
-      target: LatLng(
-        _currentUserLocation!.latitude,
-        _currentUserLocation!.longitude,
-      ),
+      target: LatLng(54.4643, 17.0282), 
       zoom: 14, // Przywróć do normalnego zoomu
       tilt: 0,  // Przywróć do normalnego tilt
       bearing: 0, // Przywróć do normalnego bearing
     );
 
-    await _mapController?.animateCamera(
+    await _mapController.animateCamera(
       CameraUpdate.newCameraPosition(defaultPosition),
     );
-  }
+    setState(() {
+      _isInfoVisible = false; // Ukryj kontener z informacjami
+    });
 }
 
   void _updateMarkerInfo() {
@@ -349,8 +378,9 @@ Future<void> _navigate() async {
     final totalMarkers = route.points.length;
 
     setState(() {
-      _navigationInfo = "${route.name}, odkryłeś 0/$totalMarkers obiektów!";
-    });
+  _navigationInfo = "${route.name}, ${AppLocalizations.of(context)!.discovered} 0/$totalMarkers ${AppLocalizations.of(context)!.places}!";
+});
+
   }
 
   Widget _buildRouteList() {

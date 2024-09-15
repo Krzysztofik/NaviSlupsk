@@ -2,5 +2,7 @@
     "appName": "Słupsk Navigation",
     "routesTitle": "Audio routes",
     "showPlaces": "Show places",
-    "navigate": "Navigate"
+    "navigate": "Navigate",
+    "discovered": "discovered",
+    "places": "places"
 }

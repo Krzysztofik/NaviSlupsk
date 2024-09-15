@@ -21,6 +21,15 @@
         "routeId": 1,
         "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
         "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
+      },
+      {
+        "id": 3,
+        "name": "TESTOWY MARKER",
+        "latitude": 54.46600175033243,
+        "longitude": 17.011907473103367,
+        "routeId": 1,
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
     ]
   },
@@ -64,7 +73,7 @@
   },
   {
     "id": 3,
-    "name": "Ścieżka Gotyku Ceglanego",
+    "name": "Ścieżka Gotyku",
     "imagePath": "assets/images/zdj3.jpg",
     "points": [
       {

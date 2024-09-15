@@ -1,10 +1,10 @@
-// ignore_for_file: unused_field
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+  final Function(Locale) onLanguageChanged; // Funkcja zmieniająca język
+
+  const WelcomeScreen({super.key, required this.onLanguageChanged});
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -24,7 +24,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
 
     // Animacja logo
     _controller = AnimationController(
-      duration: const Duration(seconds: 2), // Czas trwania animacji
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -38,8 +38,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       vsync: this,
     );
     _buttonSlideAnimation = Tween<Offset>(
-      begin: const Offset(0, 1), // Start poza ekranem
-      end: Offset.zero, // Pojawienie się na ekranie
+      begin: const Offset(0, 1),
+      end: Offset.zero,
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeOut));
 
     _controller.forward();
@@ -88,7 +88,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   Widget _buildLanguageButton(String label, String flagAsset, VoidCallback onPressed) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black, backgroundColor: Colors.white, // Kolor tekstu
+        foregroundColor: Colors.black, backgroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -96,7 +96,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
         elevation: 5,
         side: BorderSide(color: Colors.grey.shade300, width: 1),
       ),
-      icon: Image.asset(flagAsset, width: 24, height: 24), // Ikona flagi
+      icon: Image.asset(flagAsset, width: 24, height: 24),
       label: Text(
         label,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -115,7 +115,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
           Center(
             child: TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
-              duration: const Duration(seconds: 2), // Czas trwania animacji
+              duration: const Duration(seconds: 2),
               curve: Curves.easeInOut,
               builder: (context, value, child) {
                 return Transform.scale(
@@ -128,12 +128,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                         // Logo
                         Image.asset(
                           'assets/images/logo512.png',
-                          width: 200, // Możesz dostosować rozmiar
+                          width: 200,
                           height: 200,
                         ),
                         const SizedBox(height: 20),
                         // Tekst
-                        Text(
+                        const Text(
                           'NaviSłupsk',
                           style: TextStyle(
                             fontSize: 24,
@@ -163,16 +163,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                       'Polski',
                       'assets/images/poland_flag.png',
                       () {
-                        _navigateWithFade(); // Po kliknięciu
+                        widget.onLanguageChanged(const Locale('pl')); // Informujemy o zmianie języka
+                        _navigateWithFade();
                       },
                     ),
-                    const SizedBox(height: 20), // Odstęp między przyciskami
+                    const SizedBox(height: 20),
                     // Przycisk wyboru angielskiego
                     _buildLanguageButton(
                       'English',
                       'assets/images/uk_flag.png',
                       () {
-                        _navigateWithFade(); // Po kliknięciu
+                        widget.onLanguageChanged(const Locale('en')); // Informujemy o zmianie języka
+                        _navigateWithFade();
                       },
                     ),
                   ],
