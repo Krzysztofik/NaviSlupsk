@@ -50,6 +50,13 @@ dependencies:
   intl: 0.18.0
   shared_preferences: ^2.2.2
   flutter_compass: ^0.8.0
+  confetti: ^0.7.0
+  showcaseview: ^3.0.0
+  firebase_core: ^2.24.2
+  cloud_firestore: ^4.14.0
+  firebase_database: ^10.4.0
+  firebase_storage: ^11.6.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +89,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/markers/
+    - assets/images/buttonicons/
+    - assets/images/routes/sciezkaniedzwiadkow/
+    - assets/images/routes/sciezkakosciolow/
+    - assets/images/routes/sciezkamurali/
     - assets/sounds/
     - assets/json/routes.json
     - assets/json/routes_en.json

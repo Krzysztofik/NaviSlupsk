@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
-import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
+
 
 class PointModel {
   final int id;
@@ -11,6 +13,7 @@ class PointModel {
   final String? imagePath;
   final String? description;
   final String? longDescription;
+  final String? audioPath;
   bool isDiscovered;
 
   PointModel({
@@ -22,6 +25,7 @@ class PointModel {
     this.imagePath,
     this.description,
     this.longDescription, 
+    this.audioPath,
     this.isDiscovered = false
   });
 }
@@ -41,14 +45,26 @@ class RouteModel {
 
   static Future<List<RouteModel>> getRoutes() async {
     try {
-      final String jsonString = await rootBundle.loadString('assets/json/routes.json');
+      // Pobierz URL do pliku JSON z Firebase Storage
+      final storageRef = FirebaseStorage.instance.ref();
+      final routeRef = storageRef.child('routes_en.json'); // Ścieżka do pliku w Firebase Storage
+      final url = await routeRef.getDownloadURL();
+
+      // Pobierz dane z URL
+      final response = await http.get(Uri.parse(url));
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load routes');
+      }
+
+      final String jsonString = utf8.decode(response.bodyBytes);
       final List<dynamic> jsonData = json.decode(jsonString);
 
       final List<RouteModel> routes = [];
 
       for (var item in jsonData) {
         final List<PointModel> pointsList = [];
-        if (item['points']!= null) {
+        if (item['points'] != null) {
           for (var point in item['points']) {
             pointsList.add(
               PointModel(
@@ -59,6 +75,7 @@ class RouteModel {
                 routeId: point['routeId'],
                 imagePath: point['imagePath'],
                 description: point['description'],
+                audioPath: point['audioPath'],
                 longDescription: point['longDescription'],
               ),
             );

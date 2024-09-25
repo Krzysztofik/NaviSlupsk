@@ -34,25 +34,25 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Row(
           children: [
             IconButton(
-              icon: Icon(
-                currentScreenState == ScreenState.routeListState
-                    ? Icons.view_list_rounded
-                    : Icons.view_list_outlined,
+              icon: Opacity(
+                opacity: currentScreenState == ScreenState.routeListState ? 1.0 : 0.5, // Adjust opacity
+                child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: Image.asset('assets/images/buttonicons/list_icon.png'),
+                ),
               ),
-              color: currentScreenState == ScreenState.routeListState
-                  ? Color.fromRGBO(77, 182, 172, 1)
-                  : Colors.black,
               onPressed: onListIconPressed,
             ),
             IconButton(
-              icon: Icon(
-                currentScreenState == ScreenState.mapState
-                    ? Icons.place_rounded
-                    : Icons.place_outlined,
+              icon: Opacity(
+                opacity: currentScreenState == ScreenState.mapState ? 1.0 : 0.5, // Adjust opacity
+                child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: Image.asset('assets/images/buttonicons/map_icon.png'),
+                ),
               ),
-              color: currentScreenState == ScreenState.mapState
-                  ? Color.fromRGBO(77, 182, 172, 1)
-                  : Colors.black,
               onPressed: onMapIconPressed,
             ),
           ],

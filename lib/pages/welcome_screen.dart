@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_app/pages/boarding_screen.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 
 class WelcomeScreen extends StatefulWidget {
   final Function(Locale) onLanguageChanged; // Funkcja zmieniająca język
@@ -17,10 +19,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   late Animation<Offset> _buttonSlideAnimation;
 
   bool _showButtons = false; // Kontrola wyświetlania przycisków
+  bool _isFirstLaunch = true; // Flaga pierwszego uruchomienia
 
   @override
   void initState() {
     super.initState();
+    _checkFirstLaunch(); // Sprawdzenie, czy to pierwsze uruchomienie
 
     // Animacja logo
     _controller = AnimationController(
@@ -44,15 +48,44 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
 
     _controller.forward();
 
-    // Po zakończeniu animacji logo wyświetl przyciski
+    // Po zakończeniu animacji logo wyświetl przyciski tylko, jeśli to pierwsze uruchomienie
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
+      if (status == AnimationStatus.completed && _isFirstLaunch) {
         setState(() {
           _showButtons = true;
         });
         _buttonController.forward(); // Animacja przycisków
+      } else if (!_isFirstLaunch) {
+        _navigateWithFade(); // Jeśli nie jest to pierwsze uruchomienie, przejdź bezpośrednio do następnego ekranu
       }
     });
+  }
+
+  // Sprawdzenie, czy to pierwsze uruchomienie aplikacji
+  Future<void> _checkFirstLaunch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? firstLaunch = prefs.getBool('firstLaunch');
+    String? savedLanguageCode = prefs.getString('selectedLanguageCode');
+
+    if (firstLaunch == null || firstLaunch) {
+      // Jeśli to pierwsze uruchomienie, ustaw flagę
+      _isFirstLaunch = true;
+      prefs.setBool('firstLaunch', false); // Zapisz, że użytkownik uruchomił aplikację po raz pierwszy
+    } else {
+      _isFirstLaunch = false;
+      // Jeśli język był wcześniej wybrany, ustaw go
+      if (savedLanguageCode != null) {
+        widget.onLanguageChanged(Locale(savedLanguageCode));
+      }
+    }
+  }
+
+  // Zapisz wybrany język i przejdź do następnego ekranu
+  Future<void> _onLanguageSelected(String languageCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLanguageCode', languageCode); // Zapisz wybrany język
+    widget.onLanguageChanged(Locale(languageCode)); // Zmień język
+    _navigateWithFade();
   }
 
   @override
@@ -63,10 +96,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   }
 
   // Funkcja nawigacji z efektem fade, po kliknięciu przycisku
-  void _navigateWithFade() {
+  void _navigateWithFade() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  if (_isFirstLaunch == true) {
+    // Jeśli to pierwsze uruchomienie, przejdź do ekranu onboardingu
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const MapScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) => OnboardingScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = 0.0;
           const end = 1.0;
@@ -82,10 +119,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
         },
       ),
     );
+  } else {
+    // Jeśli to nie pierwsze uruchomienie, przejdź do głównego ekranu
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => MapScreen()),
+    );
   }
+}
+
 
   // Funkcja stylu przycisku
-  Widget _buildLanguageButton(String label, String flagAsset, VoidCallback onPressed) {
+  Widget _buildLanguageButton(String label, String flagAsset, String languageCode) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black, backgroundColor: Colors.white,
@@ -101,7 +145,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
         label,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      onPressed: onPressed,
+      onPressed: () => _onLanguageSelected(languageCode), // Zapisz i zmień język
     );
   }
 
@@ -162,20 +206,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                     _buildLanguageButton(
                       'Polski',
                       'assets/images/poland_flag.png',
-                      () {
-                        widget.onLanguageChanged(const Locale('pl')); // Informujemy o zmianie języka
-                        _navigateWithFade();
-                      },
+                      'pl', // Kod języka
                     ),
                     const SizedBox(height: 20),
                     // Przycisk wyboru angielskiego
                     _buildLanguageButton(
                       'English',
                       'assets/images/uk_flag.png',
-                      () {
-                        widget.onLanguageChanged(const Locale('en')); // Informujemy o zmianie języka
-                        _navigateWithFade();
-                      },
+                      'en', // Kod języka
                     ),
                   ],
                 ),

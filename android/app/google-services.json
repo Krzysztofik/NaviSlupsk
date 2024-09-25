@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "513080716177",
+    "firebase_url": "https://navislupsk-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "navislupsk",
+    "storage_bucket": "navislupsk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513080716177:android:8858256782ef1bcf404830",
+        "android_client_info": {
+          "package_name": "com.example.google_maps_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5w_8_YdyZOB-d4fsGZArojtO_l3u2-gU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

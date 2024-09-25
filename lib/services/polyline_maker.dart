@@ -5,70 +5,37 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class PolylineService {
-  final String apiKey;
+  final Map<String, List<LatLng>> _routeCache = {}; // Mapa do cache'owania tras
 
-  PolylineService(this.apiKey);
+  // Tworzymy unikalny klucz na podstawie współrzędnych
+  String _getCacheKey(LatLng origin, LatLng destination) {
+    return '${origin.latitude},${origin.longitude}-${destination.latitude},${destination.longitude}';
+  }
 
   // Metoda do pobrania trasy pieszej między dwoma punktami
-  Future<List<LatLng>> getWalkingRoute(LatLng origin, LatLng destination) async {
-    final url = 'https://maps.googleapis.com/maps/api/directions/json'
-        '?origin=${origin.latitude},${origin.longitude}'
-        '&destination=${destination.latitude},${destination.longitude}'
-        '&mode=walking'
-        '&key=$apiKey';
+  Future<List<LatLng>> getFullWalkingRoute(List<LatLng> waypoints) async {
+  // Tworzymy listę współrzędnych do zapytania
+  final coordinates = waypoints.map((point) => '${point.longitude},${point.latitude}').join(';');
+  
+  // API OSRM pozwala na przekazywanie wielu punktów trasy naraz
+  final url = 'http://router.project-osrm.org/route/v1/foot/$coordinates?overview=full&geometries=geojson';
 
-    final response = await http.get(Uri.parse(url));
+  final response = await http.get(Uri.parse(url));
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final points = data['routes'][0]['overview_polyline']['points'];
-      return _decodePoly(points);
-    } else {
-      throw Exception('Failed to load route');
-    }
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final List<dynamic> coordinates = data['routes'][0]['geometry']['coordinates'];
+
+    // Przekonwertuj współrzędne na listę LatLng
+    return coordinates.map<LatLng>((coord) {
+      return LatLng(coord[1], coord[0]);
+    }).toList();
+  } else {
+    throw Exception('Failed to load route');
   }
+}
 
-  // Metoda do dekodowania zakodowanych punktów polilinii
-  List<LatLng> _decodePoly(String encoded) {
-    final List<LatLng> poly = [];
-    int index = 0;
-    int lat = 0;
-    int lng = 0;
 
-    while (index < encoded.length) {
-      int b;
-      int shift = 0;
-      int result = 0;
-      do {
-        b = encoded.codeUnitAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-
-      final dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-      lat += dlat;
-      shift = 0;
-      result = 0;
-
-      do {
-        b = encoded.codeUnitAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-
-      final dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-      lng += dlng;
-
-      final plat = (lat / 1E5);
-      final plng = (lng / 1E5);
-
-      poly.add(LatLng(plat, plng));
-    }
-
-    return poly;
-  }
-
-  // Oblicz odległość między dwoma punktami
   Future<double> calculateDistance(LatLng origin, LatLng destination) async {
     return Geolocator.distanceBetween(
       origin.latitude,
@@ -78,44 +45,63 @@ class PolylineService {
     );
   }
 
-  // Metoda do tworzenia polilinii
-  Future<Set<Polyline>> createPolylines(
-      Position currentUserLocation, List<LatLng> routePoints, int centeredRouteId) async {
-    final origin = LatLng(currentUserLocation.latitude, currentUserLocation.longitude);
+  List<LatLng> _removeDuplicatePoints(List<LatLng> points, {double thresholdInMeters = 10}) {
+  if (points.isEmpty) return [];
 
-    // Lista wszystkich punktów do porównania
-    final allMarkers = [origin, ...routePoints];
+  final filteredPoints = <LatLng>[];
+  LatLng? previousPoint;
 
-    // Oblicz odległości między punktami
-    final distances = <LatLng, double>{};
-    for (final marker in allMarkers) {
-      distances[marker] = await calculateDistance(origin, marker);
-    }
+  for (var point in points) {
+    if (previousPoint == null) {
+      filteredPoints.add(point);
+    } else {
+      final distance = Geolocator.distanceBetween(
+        previousPoint.latitude, previousPoint.longitude,
+        point.latitude, point.longitude,
+      );
 
-    // Posortuj markery według odległości
-    final sortedMarkers = allMarkers.toList()
-      ..sort((a, b) => (distances[a] ?? 0).compareTo(distances[b] ?? 0));
-
-    // Tworzenie polilinii na podstawie posortowanych markerów
-    final polylines = <Polyline>[];
-    for (int i = 0; i < sortedMarkers.length - 1; i++) {
-      final origin = sortedMarkers[i];
-      final destination = sortedMarkers[i + 1];
-
-      try {
-        final walkingRoute = await getWalkingRoute(origin, destination);
-        polylines.add(Polyline(
-          polylineId: PolylineId('walking_route_$i'),
-          points: walkingRoute,
-          color: Colors.blueAccent, // Kolor polilinii
-          width: 6, // Szerokość
-          patterns: [PatternItem.dot, PatternItem.gap(10)], // Wzory linii
-        ));
-      } catch (e) {
-        print('Error fetching walking route: $e');
+      if (distance > thresholdInMeters) {
+        filteredPoints.add(point);
       }
     }
-
-    return polylines.toSet();
+    previousPoint = point;
   }
+
+  return filteredPoints;
+}
+
+
+  // Metoda do tworzenia polilinii
+  Future<Set<Polyline>> createPolylines(
+  Position currentUserLocation, List<LatLng> routePoints, int centeredRouteId) async {
+  
+  final origin = LatLng(currentUserLocation.latitude, currentUserLocation.longitude);
+
+  // Dodajemy punkt początkowy do trasy
+  final allMarkers = [origin, ...routePoints];
+
+  try {
+    // Pobieramy całą trasę w jednym zapytaniu
+    final fullRoute = await getFullWalkingRoute(allMarkers);
+
+    // Filtrowanie zduplikowanych punktów
+    final filteredRoute = _removeDuplicatePoints(fullRoute);
+
+    // Tworzymy jedną polilinię dla całej trasy
+    final polylines = <Polyline>{
+      Polyline(
+        polylineId: PolylineId('full_walking_route'),
+        points: filteredRoute,  // Używamy przefiltrowanych punktów
+        color: Colors.green,
+        width: 4,
+        patterns: [PatternItem.dot, PatternItem.gap(10)],
+      ),
+    };
+
+    return polylines;
+  } catch (e) {
+    print('Error fetching full walking route: $e');
+    return {};
+  }
+}
 }

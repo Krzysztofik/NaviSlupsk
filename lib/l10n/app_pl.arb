@@ -1,22 +1,7 @@
 {
-  "appName": "Nawigacja Słupsk",
-  "@appName": {
-    "description": "Tytuł aplikacji"
-  },
-
   "routesTitle": "Trasy audio",
   "@routesTitle": {
     "description": "Tytuł ekranu mapy"
-  },
-
-  "showPlaces": "Lista miejsc ",
-  "@showPlaces": {
-    "description": "Przycisk pokaż miejsca"
-  },
-
-  "navigate": "Nawiguj",
-  "@showPlaces": {
-    "description": "Przycisk nawiguj"
   },
 
   "discovered": "odkryłeś",
@@ -27,5 +12,170 @@
   "places": "miejsc",
   "@places": {
     "description": "Kawałek tekstu miejsc"
+  },
+
+  "iconSection": "Ikony na mapie",
+  "@iconSection": {
+    "description": "Nagłówek onboardingu po ikonach"
+  },
+
+  "mapSection": "Przyciski na mapie",
+  "@mapSection": {
+    "description": "Nagłówek onboardingu po mapie"
+  },
+
+  "menuSection": "Przyciski w menu",
+  "@menuSection": {
+    "description": "Nagłówek onboardingu po menu"
+  },
+
+  "naviSection": "Nawigacja w prawym górnym rogu",
+  "@naviSection": {
+    "description": "Nagłówek onboardingu po nawigacji w prawym górnym rogu aplikacji"
+  },
+
+  "compassSection": "Zanim zaczniesz nawigację, skalibruj swój kompas.",
+  "@compassSection": {
+    "description": "Informacja o kalibrowaniu kompasu."
+  },
+
+  "defaultTitle": "Miejsca do odwiedzenia",
+  "@defaultTitle": {
+    "description": "Tytuł znacznika."
+  },
+
+  "defaultDescription": "Są to miejsca na wybranych trasach do odwiedzenia. Gdy podejdziesz do obiektu na bliżej niż 30 metrów, wyświetli Ci się jego zdjęcie, nazwa, przycisk zawierający ścieżke dźwiękową do odsłuchania, przycisk kierujący do więcej informacji na osobnym ekranie i możliwość zaznaczenia obiektu jako odwiedzony.",
+  "@defaultDescription": {
+    "description": "Opis znacznika."
+  },
+
+  "discoveredTitle": "Miejsca już odwiedzone",
+  "@discoveredTitle": {
+    "description": "Tytuł odkrytego znacznika"
+  },
+
+  "discoveredDescription": "Odwiedzone przez Ciebie miejsce zmieni swój znacznik na taki. Trasa nie będzie już więcej prowadzić Cię przez zaznaczone obiekty dopóki nie cofniesz odwiedzenia obiektu. Możesz to zrobić po kliknięciu na odwiedzony obiekt i odhaczeniu go z powrotem.",
+  "@discoveredDescription": {
+    "description": "Opis odkrytego znacznika"
+  },
+  
+  "userTitle": "Twoja ikona na mapie",
+  "@userTitle": {
+    "description": "Tytuł ikony na mapie"
+  },
+
+  "userDescription": "Jest to twoja aktualna lokalizacja na mapie w której się znajdujesz. Pamiętaj jednak, że jeżeli nie zezwolisz aplikacji na dostęp do lokalizacji to nie zostanie ona wyświetlona, a Ty nie będziesz mógł kontynuować nawigacji po trasach.",
+  "@userDescription": {
+    "description": "Opis ikony na mapie"
+  },
+
+  "naviTitle": "Twoja ikona podczas nawigacji",
+  "@naviTitle": {
+    "description": "Tytuł ikony podczas nawigacji"
+  },
+
+  "naviDescription": "Ikona twojej lokalizacji zmieni się na tą, gdy będziesz w trybie nawigacji. Twój telefon będzie wykorzystywał wtedy wbudowany kompas, za pomocą którego będziesz mógł widzieć w którą stronę aktualnie jesteś skierowany i w którą stronę aktualnie się poruszasz.",
+  "@naviDescription": {
+    "description": "Opis ikony podczas nawigacji."
+  },
+
+  "audioOffTitle": "Dźwięk wyłączony",
+  "@audioOffTitle": {
+    "description": "Tytuł audio off."
+  },
+
+  "audioOffDescription": "Dźwięk w aplikacji jest wyłączony.",
+  "@audioOffDescription": {
+    "description": "Opis audio off"
+  },
+
+  "audioOnTitle": "Dźwięk włączony",
+  "@audioOnTitle": {
+    "description": "Tytuł audio on"
+  },
+
+  "audioOnDescription": "Dźwięk w aplikacji jest włączony.",
+  "@audioOnDescription": {
+    "description": "Opis audio on"
+  },
+
+  "menuTitle": "Przycisk menu",
+  "@menuTitle": {
+    "description": "Tytuł przycisk menu."
+  },
+
+  "menuDescription": "Za pomocą tego przycisku możesz wybrać, czy chcesz mieć menu widoczne na mapie, czy nie.",
+  "@menuDescription": {
+    "description": "Opis przycisk menu."
+  },
+
+  "userCenterTitle": "Wycentruj mapę",
+  "@userCenterTitle": {
+    "description": "Tytuł user center."
+  },
+
+  "userCenterDescription": "Po kliknięciu mapa zostanie wycentrowana na twojej lokalizacji.",
+  "@userCenterDescription": {
+    "description": "Opis user center."
+  },
+
+  "startTitle": "Rozpocznij nawigację",
+  "@startTitle": {
+    "description": "Tytuł rozpocznij nawigację"
+  },
+
+  "startDescription": "Za pomocą tego przycisku rozpoczniesz tryb nawigacji i będziesz mógł odkrywać nowe miejsca na mapie.",
+  "@startDescription": {
+    "description": "Opis rozpocznij nawigację"
+  },
+
+  "stopTitle": "Zakończ nawigację",
+  "@stopTitle": {
+    "description": "Tytuł zakończ nawigację"
+  },
+
+  "stopDescription": "Za pomocą tego przycisku zakończysz tryb nawigacji.",
+  "@stopDescription": {
+    "description": "Opis zakończ nawigację"
+  },
+
+  "infoTitle": "Informacje",
+  "@infoTitle": {
+    "description": "Tytuł info"
+  },
+
+  "infoDescription": "Po kliknięciu tego przycisku zostaniesz przeniesiony do ekranu listy tras z rozwiniętą aktualnie wybraną trasą. Będziesz mógł tam zobaczyć jakie obiekty zwiedzisz w trakcie nawigowania po tej trasie.",
+  "@infoDescription": {
+    "description": "Opis info"
+  },
+
+  "mapTitle": "Ekran mapy",
+  "@mapTitle": {
+    "description": "Tytuł ekran mapy"
+  },
+
+  "mapDescription": "Po kliknięciu przejdziesz do ekranu na którym znajduje się twoja mapa.",
+  "@mapDescription": {
+    "description": "Opis ekran mapy"
+  },
+
+  "listTitle": "Ekran listy tras",
+  "@listTitle": {
+    "description": "Tytuł listy tras"
+  },
+
+  "listDescription": "Po kliknięciu przejdziesz do ekranu na którym znajduje się twoja lista tras, będzie rozwinięta aktualnie wybrana trasa z twojego menu.",
+  "@listDescription": {
+    "description": "Opis listy tras"
+  },
+
+  "startButton": "Rozpocznij",
+  "@startButton": {
+    "description": "Przycisk onboardingu."
+  },
+
+  "routeInfo": "Ścieżki na mapie są rysowane od punktu do punktu, nie musisz się nimi sugerować. Możesz przejść ścieżkę w trybie nawigacji jak tylko Ci się podoba.",
+  "@routeInfo": {
+    "description": "Informacja o ścieżkach."
   }
 }

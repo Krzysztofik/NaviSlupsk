@@ -21,15 +21,6 @@
         "routeId": 1,
         "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
         "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
-      },
-      {
-        "id": 3,
-        "name": "TESTOWY MARKER",
-        "latitude": 54.46600175033243,
-        "longitude": 17.011907473103367,
-        "routeId": 1,
-        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
-        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
     ]
   },
@@ -128,6 +119,50 @@
         "longitude": 17.034339,
         "routeId": 4,
         "imagePath": "assets/images/zamekksiazatpomorskich.JPG",
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 10. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
+      }
+    ]
+  },
+
+  {
+    "id": 5,
+    "name": "Ścieżka Testowa",
+    "imagePath": "assets/images/test.jpg",
+    "points": [
+      {
+        "id": 11,
+        "name": "TESTOWY MARKER 1",
+        "latitude": 54.46480424877419,
+        "longitude": 17.010591454588212,
+        "routeId": 5,
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 2. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
+      },
+      {
+        "id": 12,
+        "name": "TESTOWY MARKER 2",
+        "latitude": 54.46686105722846,
+        "longitude": 17.012120588842265,
+        "routeId": 5,
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 9. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
+      },
+      {
+        "id": 13,
+        "name": "TESTOWY MARKER 3",
+        "latitude": 54.469541818987274,
+        "longitude": 17.00716098822283,
+        "routeId": 5,
+        "description": "Jest to krótki i zwięzły opis do zabytku o numerze 10. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
+        "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
+      },
+      {
+        "id": 14,
+        "name": "TESTOWY MARKER 4",
+        "latitude": 54.47419193612592,
+        "longitude": 17.005113146805428,
+        "routeId": 5,
         "description": "Jest to krótki i zwięzły opis do zabytku o numerze 10. Charakteryzuje się on tym, że go jeszcze nie ma wpisanego w JSON.",
         "longDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempus, lacus et accumsan suscipit, est ipsum tincidunt tortor, nec sodales eros lacus nec lacus. Quisque ac sem quam. Etiam suscipit dolor ut nibh dictum, eget suscipit nisi consequat. Sed molestie dapibus purus, in hendrerit urna tincidunt quis. Nam venenatis turpis sem, vitae condimentum augue vulputate eu. Donec eleifend, nunc et rutrum placerat, leo turpis molestie eros, vel pretium lacus diam et leo. Duis sed tempus sapien. Ut at convallis tellus. Ut fringilla aliquet pulvinar. Vestibulum in tortor sed ante molestie aliquet quis in quam. Nullam ac mi sed nulla commodo dapibus. Quisque non accumsan justo. In elit magna, tristique in tellus vitae, aliquet pretium quam. Mauris efficitur vestibulum quam, a maximus ante sodales a."
       }
