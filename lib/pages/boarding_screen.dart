@@ -12,77 +12,159 @@ class OnboardingScreen extends StatelessWidget {
     final List<Map<String, dynamic>> mapData = [
       {
         'image': 'assets/images/markers/default_marker.png',
-        'title': localization.defaultTitle,  // Localized string
-        'description': localization.defaultDescription,  // Localized string
+        'title': localization.defaultTitle,
+        'description': localization.defaultDescription,
       },
       {
         'image': 'assets/images/markers/discovered_marker.png',
-        'title': localization.discoveredTitle,  // Localized string
-        'description': localization.discoveredDescription,  // Localized string
+        'title': localization.discoveredTitle,
+        'description': localization.discoveredDescription,
       },
       {
         'image': 'assets/images/markers/user_marker.png',
-        'title': localization.userTitle,  // Localized string
-        'description': localization.userDescription,  // Localized string
+        'title': localization.userTitle,
+        'description': localization.userDescription,
       },
       {
         'image': 'assets/images/markers/navigation_marker.png',
-        'title': localization.naviTitle,  // Localized string
-        'description': localization.naviDescription,  // Localized string
+        'title': localization.naviTitle,
+        'description': localization.naviDescription,
       },
     ];
 
     final List<Map<String, dynamic>> mapButtonData = [
       {
         'image': 'assets/images/buttonicons/audio_off_icon.png',
-        'title': localization.audioOffTitle,  // Localized string
-        'description': localization.audioOffDescription,  // Localized string
+        'title': localization.audioOffTitle,
+        'description': localization.audioOffDescription,
       },
       {
         'image': 'assets/images/buttonicons/audio_on_icon.png',
-        'title': localization.audioOnTitle,  // Localized string
-        'description': localization.audioOnDescription,  // Localized string
+        'title': localization.audioOnTitle,
+        'description': localization.audioOnDescription,
       },
       {
         'image': 'assets/images/buttonicons/menu_icon.png',
-        'title': localization.menuTitle,  // Localized string
-        'description': localization.menuDescription,  // Localized string
+        'title': localization.menuTitle,
+        'description': localization.menuDescription,
       },
       {
         'image': 'assets/images/buttonicons/user_center.png',
-        'title': localization.userCenterTitle,  // Localized string
-        'description': localization.userCenterDescription,  // Localized string
+        'title': localization.userCenterTitle,
+        'description': localization.userCenterDescription,
       },
     ];
 
+    // Updated menuButtonData with buttons instead of images
     final List<Map<String, dynamic>> menuButtonData = [
       {
-        'image': 'assets/images/buttonicons/start_button.png',
-        'title': localization.startTitle,  // Localized string
-        'description': localization.startDescription,  // Localized string
+        'button': ElevatedButton(
+          onPressed: () {
+          },
+          style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            side: BorderSide(
+              color: Colors.green, // Kolor obramowania
+              width: 1, // Grubość obramowania
+            ),
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: 5,
+            horizontal: 18,
+          ),
+          elevation: 3, // Efekt podniesienia
+          shadowColor:Colors.green, // Kolor cienia
+        ),
+          child: Text(
+          'Start', // Tekst przycisku
+          style: TextStyle(
+            color: Colors.green, // Kolor tekstu
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ), 
+        ),
+        'title': localization.startTitle,
+        'description': localization.startDescription,
       },
       {
-        'image': 'assets/images/buttonicons/stop_button.png',
-        'title': localization.stopTitle,  // Localized string
-        'description': localization.stopDescription,  // Localized string
+        'button': ElevatedButton(
+          onPressed: () {
+          },
+          style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            side: BorderSide(
+              color: Colors.red, // Kolor obramowania
+              width: 1, // Grubość obramowania
+            ),
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: 5,
+            horizontal: 18,
+          ),
+          elevation: 3, // Efekt podniesienia
+          shadowColor:Colors.red, // Kolor cienia
+        ),
+          child: Text(
+          'Stop', // Tekst przycisku
+          style: TextStyle(
+            color: Colors.red, // Kolor tekstu
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ), 
+        ),
+        'title': localization.stopTitle,
+        'description': localization.stopDescription,
       },
       {
-        'image': 'assets/images/buttonicons/info_button.png',
-        'title': localization.infoTitle,  // Localized string
-        'description': localization.infoDescription,  // Localized string
+        'button': ElevatedButton(
+          onPressed: () {
+          },
+          style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            side: BorderSide(
+              color: Colors.blue, // Kolor obramowania
+              width: 1, // Grubość obramowania
+            ),
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: 5,
+            horizontal: 18,
+          ),
+          elevation: 3, // Efekt podniesienia
+          shadowColor:Colors.blue, // Kolor cienia
+        ),
+          child: Text(
+          'Info', // Tekst przycisku
+          style: TextStyle(
+            color: Colors.blue, // Kolor tekstu
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ), 
+        ),
+        'title': localization.infoTitle,
+        'description': localization.infoDescription,
       },
     ];
 
     final List<Map<String, dynamic>> navigationData = [
       {
         'image': 'assets/images/buttonicons/map_icon.png',
-        'title': localization.mapTitle,  // Localized string
-        'description': localization.mapDescription,  // Localized string
+        'title': localization.mapTitle,
+        'description': localization.mapDescription,
       },
       {
         'image': 'assets/images/buttonicons/list_icon.png',
-        'title': localization.listTitle,  // Localized string
-        'description': localization.listDescription,  // Localized string
+        'title': localization.listTitle,
+        'description': localization.listDescription,
       },
     ];
 
@@ -91,7 +173,7 @@ class OnboardingScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
-            SectionHeader(title: localization.iconSection),  // Localized section header
+            SectionHeader(title: localization.iconSection),
             ...mapData.map((data) {
               return OnboardingItem(
                 imagePath: data['image'],
@@ -100,7 +182,7 @@ class OnboardingScreen extends StatelessWidget {
               );
             }).toList(),
             const SizedBox(height: 20),
-            SectionHeader(title: localization.mapSection),  // Localized section header
+            SectionHeader(title: localization.mapSection),
             ...mapButtonData.map((data) {
               return OnboardingItem(
                 imagePath: data['image'],
@@ -109,16 +191,17 @@ class OnboardingScreen extends StatelessWidget {
               );
             }).toList(),
             const SizedBox(height: 20),
-            SectionHeader(title: localization.menuSection),  // Localized section header
+            SectionHeader(title: localization.menuSection),
+            // Updated rendering logic for buttons
             ...menuButtonData.map((data) {
               return OnboardingItem(
-                imagePath: data['image'],
+                button: data['button'], // Passing the button widget
                 title: data['title'],
                 description: data['description'],
               );
             }).toList(),
             const SizedBox(height: 20),
-            SectionHeader(title: localization.naviSection),  // Localized section header
+            SectionHeader(title: localization.naviSection),
             ...navigationData.map((data) {
               return OnboardingItem(
                 imagePath: data['image'],
@@ -128,7 +211,7 @@ class OnboardingScreen extends StatelessWidget {
             }).toList(),
             const SizedBox(height: 20),
             Text(
-              localization.routeInfo,  // Localized text
+              localization.routeInfo,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black54,
@@ -143,7 +226,7 @@ class OnboardingScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              localization.compassSection,  // Localized text
+              localization.compassSection,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black54,
@@ -158,7 +241,7 @@ class OnboardingScreen extends StatelessWidget {
                 );
               },
               child: Text(
-                localization.startButton,  // Localized button text
+                localization.startButton,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -188,12 +271,14 @@ class OnboardingScreen extends StatelessWidget {
 
 // Define the OnboardingItem widget
 class OnboardingItem extends StatelessWidget {
-  final String imagePath;
+  final String? imagePath; // Optional imagePath
+  final Widget? button; // Optional button widget
   final String title;
   final String description;
 
   const OnboardingItem({
-    required this.imagePath,
+    this.imagePath,
+    this.button,
     required this.title,
     required this.description,
   });
@@ -204,11 +289,13 @@ class OnboardingItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Image.asset(
-            imagePath,
-            width: 50,
-            height: 50,
-          ),
+          if (imagePath != null)
+            Image.asset(
+              imagePath!,
+              width: 50,
+              height: 50,
+            ),
+          if (button != null) button!, // Display button if available
           const SizedBox(width: 20),
           Expanded(
             child: Column(
@@ -238,6 +325,8 @@ class OnboardingItem extends StatelessWidget {
     );
   }
 }
+
+
 
 // Define the SectionHeader widget
 class SectionHeader extends StatelessWidget {

@@ -41,10 +41,6 @@ class RouteListScreen extends StatelessWidget {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text(
-                    '$discoveredMarkers/$totalMarkers', // Wyświetlanie liczby odkrytych markerów
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                  ),
                 ],
               ),
               leading: Image.asset(

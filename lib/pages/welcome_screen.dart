@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/pages/boarding_screen.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_maps_app/models/globals.dart';
+import 'package:provider/provider.dart';
+import 'package:google_maps_app/providers/locale_provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final Function(Locale) onLanguageChanged; // Funkcja zmieniająca język
-
-  const WelcomeScreen({super.key, required this.onLanguageChanged});
+  const WelcomeScreen({super.key});
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -18,15 +19,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   late AnimationController _buttonController;
   late Animation<Offset> _buttonSlideAnimation;
 
-  bool _showButtons = false; // Kontrola wyświetlania przycisków
-  bool _isFirstLaunch = true; // Flaga pierwszego uruchomienia
+  bool _showButtons = false; 
+  bool _isFirstLaunch = true; 
 
   @override
   void initState() {
     super.initState();
-    _checkFirstLaunch(); // Sprawdzenie, czy to pierwsze uruchomienie
+    _checkFirstLaunch();
 
-    // Animacja logo
+    // Logo animation
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -36,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    // Animacja przycisków (slide up)
+    // Buttons slide up animation
     _buttonController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -48,91 +49,75 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
 
     _controller.forward();
 
-    // Po zakończeniu animacji logo wyświetl przyciski tylko, jeśli to pierwsze uruchomienie
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed && _isFirstLaunch) {
         setState(() {
           _showButtons = true;
         });
-        _buttonController.forward(); // Animacja przycisków
+        _buttonController.forward(); 
       } else if (!_isFirstLaunch) {
-        _navigateWithFade(); // Jeśli nie jest to pierwsze uruchomienie, przejdź bezpośrednio do następnego ekranu
+        _navigateWithSlide(); 
       }
     });
   }
 
-  // Sprawdzenie, czy to pierwsze uruchomienie aplikacji
   Future<void> _checkFirstLaunch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? firstLaunch = prefs.getBool('firstLaunch');
     String? savedLanguageCode = prefs.getString('selectedLanguageCode');
 
     if (firstLaunch == null || firstLaunch) {
-      // Jeśli to pierwsze uruchomienie, ustaw flagę
       _isFirstLaunch = true;
-      prefs.setBool('firstLaunch', false); // Zapisz, że użytkownik uruchomił aplikację po raz pierwszy
+      prefs.setBool('firstLaunch', false); 
     } else {
       _isFirstLaunch = false;
-      // Jeśli język był wcześniej wybrany, ustaw go
       if (savedLanguageCode != null) {
-        widget.onLanguageChanged(Locale(savedLanguageCode));
+        Provider.of<LocaleProvider>(context, listen: false).setLocale(Locale(savedLanguageCode));
       }
     }
   }
 
-  // Zapisz wybrany język i przejdź do następnego ekranu
   Future<void> _onLanguageSelected(String languageCode) async {
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('selectedLanguageCode', languageCode); // Zapisz wybrany język
-    widget.onLanguageChanged(Locale(languageCode)); // Zmień język
-    _navigateWithFade();
+    await prefs.setString('selectedLanguageCode', languageCode);
+    
+    localeProvider.setLocale(Locale(languageCode)); 
+    final globals = Globals();
+    globals.setLanguageCode(languageCode);
+    _navigateWithSlide();
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _buttonController.dispose(); // Pamiętaj o zamknięciu obu kontrolerów
+    _buttonController.dispose();
     super.dispose();
   }
 
-  // Funkcja nawigacji z efektem fade, po kliknięciu przycisku
-  void _navigateWithFade() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  if (_isFirstLaunch == true) {
-    // Jeśli to pierwsze uruchomienie, przejdź do ekranu onboardingu
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => OnboardingScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = 0.0;
-          const end = 1.0;
-          const curve = Curves.easeInOut;
-
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var fadeAnimation = animation.drive(tween);
-
-          return FadeTransition(
-            opacity: fadeAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
-  } else {
-    // Jeśli to nie pierwsze uruchomienie, przejdź do głównego ekranu
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => MapScreen()),
-    );
-  }
+  void _navigateWithSlide() {
+  Navigator.pushReplacement(
+    context,
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return _isFirstLaunch ? OnboardingScreen() : MapScreen();
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    ),
+  );
 }
 
-
-  // Funkcja stylu przycisku
   Widget _buildLanguageButton(String label, String flagAsset, String languageCode) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black, backgroundColor: Colors.white,
+        foregroundColor: Colors.black, 
+        backgroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -145,7 +130,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
         label,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      onPressed: () => _onLanguageSelected(languageCode), // Zapisz i zmień język
+      onPressed: () => _onLanguageSelected(languageCode),
     );
   }
 
@@ -155,7 +140,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Animacja logo i tekstu
           Center(
             child: TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
@@ -169,14 +153,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Logo
                         Image.asset(
                           'assets/images/logo512.png',
                           width: 200,
                           height: 200,
                         ),
                         const SizedBox(height: 20),
-                        // Tekst
                         const Text(
                           'NaviSłupsk',
                           style: TextStyle(
@@ -191,7 +173,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
               },
             ),
           ),
-          // Przycisk wyboru języka (po zakończeniu animacji)
           if (_showButtons)
             Positioned(
               bottom: 80,
@@ -202,18 +183,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Przycisk wyboru polskiego
                     _buildLanguageButton(
                       'Polski',
                       'assets/images/poland_flag.png',
-                      'pl', // Kod języka
+                      'pl',
                     ),
                     const SizedBox(height: 20),
-                    // Przycisk wyboru angielskiego
                     _buildLanguageButton(
                       'English',
                       'assets/images/uk_flag.png',
-                      'en', // Kod języka
+                      'en',
                     ),
                   ],
                 ),

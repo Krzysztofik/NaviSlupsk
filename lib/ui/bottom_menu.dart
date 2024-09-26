@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
-
 class BottomMenu extends StatefulWidget {
   final void Function(int) onPageChanged;
   final bool isVisible;
@@ -33,7 +32,6 @@ class BottomMenu extends StatefulWidget {
 class _BottomMenuState extends State<BottomMenu> {
   List<RouteModel> menus = [];
   final PageController _pageController = PageController(viewportFraction: 0.7);
-  int _currentRouteId = 1;
 
   bool isNavigating = true;
 
@@ -63,7 +61,6 @@ class _BottomMenuState extends State<BottomMenu> {
 
     if ((currentPage - roundedPage).abs() < 0.01) {
       final RouteModel currentRoute = menus[roundedPage];
-      _currentRouteId = currentRoute.id;
       widget.onPageChanged(currentRoute.id);
       widget.onMarkerInfoUpdate();
 
@@ -73,25 +70,6 @@ class _BottomMenuState extends State<BottomMenu> {
     }
   }
 
-  ElevatedButton _buildIconButton(String assetPath, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.zero,
-      ),
-      child: Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        width: 50,
-        height: 50,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,11 +102,11 @@ class _BottomMenuState extends State<BottomMenu> {
                   ],
                 ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      height: 2.70 / 5 * 250,
+                      height: 2.70 / 5 * 275,
                       child: ClipRRect(
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10),
@@ -141,7 +119,7 @@ class _BottomMenuState extends State<BottomMenu> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 6, left: 8),
+                      padding: const EdgeInsets.only(top: 6),
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -154,70 +132,79 @@ class _BottomMenuState extends State<BottomMenu> {
                       ),
                     ),
                     Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 75),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (isNavigating) {
-                                    widget
-                                        .onNavigate(); // Wywołaj funkcję onNavigate
-                                  } else {
-                                    widget.onStop(); // Wywołaj funkcję onStop
-                                  }
-                                  isNavigating =
-                                      !isNavigating; // Zmień stan na przeciwny
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.zero,
-                              ),
-                              child: Image.asset(
-                                isNavigating
-                                    ? 'assets/images/buttonicons/start_button.png'
-                                    : 'assets/images/buttonicons/stop_button.png',
-                                fit: BoxFit.cover,
-                                width: 50, // Szerokość obrazu
-                                height: 50, // Wysokość obrazu
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                widget.onListIconPressed();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.zero,
-                              ),
-                              child: Image.asset(
-                                'assets/images/buttonicons/info_button.png',
-                                fit: BoxFit.cover,
-                                width: 50, // Szerokość obrazu
-                                height: 50, // Wysokość obrazu
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Padding(
+      padding: const EdgeInsets.only(left: 0),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            if (isNavigating) {
+              widget.onNavigate(); // Wywołaj funkcję onNavigate
+            } else {
+              widget.onStop(); // Wywołaj funkcję onStop
+            }
+            isNavigating = !isNavigating; // Zmień stan na przeciwny
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            side: BorderSide(
+              color: isNavigating ? Colors.green : Colors.red, // Kolor obramowania
+              width: 1, // Grubość obramowania
+            ),
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: 5,
+            horizontal: 18,
+          ),
+          elevation: 3, // Efekt podniesienia
+          shadowColor: isNavigating ? Colors.green : Colors.red, // Kolor cienia
+        ),
+        child: Text(
+          isNavigating ? 'Start' : 'Stop', // Tekst przycisku
+          style: TextStyle(
+            color: isNavigating ? Colors.green : Colors.red, // Kolor tekstu
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ),
+    SizedBox(width: 10), // Odstęp pomiędzy przyciskami
+    ElevatedButton(
+      onPressed: () {
+        widget.onListIconPressed(); // Wywołaj funkcję dla przycisku Info
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white, // Białe wypełnienie dla przycisku Info
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+          side: BorderSide(
+            color: Colors.blue, // Obramowanie w kolorze przycisku Info
+            width: 1, // Grubość obramowania
+          ),
+        ),
+        padding: EdgeInsets.symmetric(
+          vertical: 5,
+          horizontal: 18,
+        ),
+        elevation: 3, // Efekt podniesienia
+        shadowColor: Colors.blueAccent, // Kolor cienia
+      ),
+      child: Text(
+        'Info', // Tekst na przycisku Info
+        style: TextStyle(
+          color: Colors.blue, // Niebieski tekst, aby pasował do obramowania
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  ],
+)
                   ],
                 ),
               ),

@@ -3,6 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:google_maps_app/models/globals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_maps_app/services/custom_info_window.dart';
+import 'package:confetti/confetti.dart';
 
 // Logika tworzenia markerów.
 
@@ -70,12 +74,30 @@ Future<void> loadMarkers() async {
   final routes = await RouteModel.getRoutes();
   markers = routes
       .fold<List<PointModel>>([], (list, route) => list..addAll(route.points));
+  await _initializeDiscoveredStates(markers);
 }
 
-Set<Marker> buildMarkers(int centeredRouteId,
-    CustomInfoWindowController customInfoWindowController) {
+Future<void> _initializeDiscoveredStates(List<PointModel> points) async {
+  final prefs = await SharedPreferences.getInstance();
+  for (var point in points) {
+    point.isDiscovered = prefs.getBool('marker_${point.id}') ?? false;
+  }
+}
+
+Set<Marker> buildMarkers(
+  int _centeredRouteId,
+  CustomInfoWindowController customInfoWindowController,
+  BuildContext context,
+  bool _isSoundEnabled,
+  Function(String) playSound,
+  ConfettiController confettiControllerSmall,
+  ConfettiController confettiControllerBig,
+  List<RouteModel> _routes,
+  Function _updateDiscoveryState,
+  Function _updateMarkerInfo,
+) {
   List<PointModel> centeredPoints =
-      markers.where((point) => point.routeId == centeredRouteId).toList();
+      markers.where((point) => point.routeId == _centeredRouteId).toList();
 
   return centeredPoints.map((marker) {
     return Marker(
@@ -85,114 +107,20 @@ Set<Marker> buildMarkers(int centeredRouteId,
           ? discoveredMarker
           : defaultMarker, // Zmieniaj ikonę, jeśli marker odkryty
       onTap: () {
-        customInfoWindowController.addInfoWindow!(
-    StatefulBuilder(
-      builder: (context, setState) {
-        final screenSize = MediaQuery.of(context).size;
-        final double windowWidth = 300;
-        final double windowHeight = 100;
-
-        return Container(
-          padding: const EdgeInsets.all(12.0),
-          width: windowWidth,
-          constraints: BoxConstraints( // Normalna wysokość
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.lightBlueAccent.shade100, Colors.white],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 15,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image section
-              Container(
-                width: double.infinity,
-                height: windowWidth * 0.5, // Proporcjonalna wysokość
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: marker.imagePath != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          marker.imagePath!,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.image_not_supported,
-                            size: 50,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
-              ),
-              const SizedBox(height: 10),
-              // Name and Actions
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      marker.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.blueGrey[900],
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.volume_up,
-                          color: Colors.teal,
-                        ),
-                        onPressed: () {
-                            if (marker.audioPath != null) {
-                              _playSound(marker.audioPath!);
-                            }
-                          },
-                      ),
-                      const SizedBox(width: 6),
-                      IconButton(
-                        icon: const Icon(Icons.info_outline),
-                        color: Colors.teal,
-                        onPressed: () {
-                          // Akcja przycisku info
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-            ],
-          ),
+        showCustomInfoWindow(
+          marker,
+          customInfoWindowController,
+          context,
+          isSoundEnabled,
+          _playSound,
+          confettiControllerSmall,
+          confettiControllerBig,
+          _centeredRouteId,
+          _routes,
+          _updateDiscoveryState,
+          _updateMarkerInfo,
+          
         );
-      },
-    ),
-    LatLng(marker.latitude, marker.longitude),
-  );
       },
     );
   }).toSet();

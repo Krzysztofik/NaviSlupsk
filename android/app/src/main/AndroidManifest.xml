@@ -6,6 +6,7 @@
     <application
         android:label="NaviSłupsk"
         android:name="${applicationName}"
+        android:largeHeap="true"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
