@@ -4,7 +4,7 @@ import 'package:google_maps_app/pages/welcome_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_maps_app/models/globals.dart';
+import 'package:google_maps_app/providers/globals.dart';
 import 'package:provider/provider.dart';
 import 'providers/locale_provider.dart';
 

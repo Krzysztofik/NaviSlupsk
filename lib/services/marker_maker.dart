@@ -3,9 +3,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:google_maps_app/models/globals.dart';
+import 'package:google_maps_app/providers/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_maps_app/services/custom_info_window.dart';
+import 'package:google_maps_app/ui/custom_info_window.dart';
 import 'package:confetti/confetti.dart';
 
 late BitmapDescriptor defaultMarker; // Podstawowy marker.

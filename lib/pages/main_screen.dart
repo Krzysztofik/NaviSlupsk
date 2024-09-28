@@ -15,11 +15,11 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
-import 'package:google_maps_app/models/globals.dart';
+import 'package:google_maps_app/providers/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_app/providers/locale_provider.dart';
-import 'package:google_maps_app/services/custom_info_window.dart';
+import 'package:google_maps_app/ui/custom_info_window.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class MapScreen extends StatefulWidget {

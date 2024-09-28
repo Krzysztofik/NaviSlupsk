@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_app/pages/boarding_screen.dart';
 import 'package:google_maps_app/pages/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_maps_app/models/globals.dart';
+import 'package:google_maps_app/providers/globals.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_app/providers/locale_provider.dart';
 

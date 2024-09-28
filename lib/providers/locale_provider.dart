@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_maps_app/models/globals.dart';
+import 'package:google_maps_app/providers/globals.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
 class LocaleProvider with ChangeNotifier {

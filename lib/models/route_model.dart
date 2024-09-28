@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_maps_app/models/globals.dart';
+import 'package:google_maps_app/providers/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
