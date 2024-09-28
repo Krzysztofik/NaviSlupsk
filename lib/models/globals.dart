@@ -17,6 +17,7 @@ class Globals with ChangeNotifier {
   Globals._internal();
   
   String languageCode = 'pl'; // default language code
+  // ignore: unused_element
   String get _languageCode => languageCode;
   Future<void> loadLanguageCode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

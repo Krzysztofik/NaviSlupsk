@@ -5,28 +5,25 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class PolylineService {
-  final Map<String, List<LatLng>> _routeCache = {}; // Mapa do cache'owania tras
 
-  // Tworzymy unikalny klucz na podstawie współrzędnych
-  String _getCacheKey(LatLng origin, LatLng destination) {
-    return '${origin.latitude},${origin.longitude}-${destination.latitude},${destination.longitude}';
-  }
-
-  // Metoda do pobrania trasy pieszej między dwoma punktami
+  // Metoda do pobrania trasy pieszej między punktami.
   Future<List<LatLng>> getFullWalkingRoute(List<LatLng> waypoints) async {
-  // Tworzymy listę współrzędnych do zapytania
+
+  // Konwersja listy punktów na format wymagany przez API OSRM (separator ';').
   final coordinates = waypoints.map((point) => '${point.longitude},${point.latitude}').join(';');
   
-  // API OSRM pozwala na przekazywanie wielu punktów trasy naraz
+  // Budowanie URL do API OSRM, które zwraca pełną trasę dla pieszych w formacie GeoJSON.
   final url = 'http://router.project-osrm.org/route/v1/foot/$coordinates?overview=full&geometries=geojson';
 
+  // Wysłanie zapytania HTPP do API.
   final response = await http.get(Uri.parse(url));
 
+  // Jeżeli odpowiedź poprawna - dekodowanie danych w formacie JSON.
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
     final List<dynamic> coordinates = data['routes'][0]['geometry']['coordinates'];
 
-    // Przekonwertuj współrzędne na listę LatLng
+    // Konwersja współrzędnych na listę obiektów LatLng.
     return coordinates.map<LatLng>((coord) {
       return LatLng(coord[1], coord[0]);
     }).toList();
@@ -35,7 +32,7 @@ class PolylineService {
   }
 }
 
-
+  // Metoda obliczająca odległość między dwoma punktami przy użyciu Geolocator.
   Future<double> calculateDistance(LatLng origin, LatLng destination) async {
     return Geolocator.distanceBetween(
       origin.latitude,
@@ -45,11 +42,13 @@ class PolylineService {
     );
   }
 
+  // Funkcja usuwająca zduplikowane punkty trasy.
+  // Jeżeli punkty są zbyt blisko siebie (np. 10 metrów), jeden z nich jest usuwany.
   List<LatLng> _removeDuplicatePoints(List<LatLng> points, {double thresholdInMeters = 10}) {
   if (points.isEmpty) return [];
 
-  final filteredPoints = <LatLng>[];
-  LatLng? previousPoint;
+  final filteredPoints = <LatLng>[]; 
+  LatLng? previousPoint; 
 
   for (var point in points) {
     if (previousPoint == null) {
@@ -71,23 +70,17 @@ class PolylineService {
 }
 
 
-  // Metoda do tworzenia polilinii
+  // Metoda tworząca polilinie na mapie, łącząca punkty użytkownika z trasą.
   Future<Set<Polyline>> createPolylines(
   Position currentUserLocation, List<LatLng> routePoints, int centeredRouteId) async {
   
   final origin = LatLng(currentUserLocation.latitude, currentUserLocation.longitude);
-
-  // Dodajemy punkt początkowy do trasy
   final allMarkers = [origin, ...routePoints];
 
   try {
-    // Pobieramy całą trasę w jednym zapytaniu
     final fullRoute = await getFullWalkingRoute(allMarkers);
-
-    // Filtrowanie zduplikowanych punktów
     final filteredRoute = _removeDuplicatePoints(fullRoute);
-
-    // Tworzymy jedną polilinię dla całej trasy
+    
     final polylines = <Polyline>{
       Polyline(
         polylineId: PolylineId('full_walking_route'),

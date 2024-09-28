@@ -44,7 +44,7 @@
     "description": "Tytuł znacznika."
   },
 
-  "defaultDescription": "Są to miejsca na wybranych trasach do odwiedzenia. Gdy podejdziesz do obiektu na bliżej niż 30 metrów, wyświetli Ci się jego zdjęcie, nazwa, przycisk zawierający ścieżke dźwiękową do odsłuchania, przycisk kierujący do więcej informacji na osobnym ekranie i możliwość zaznaczenia obiektu jako odwiedzony.",
+  "defaultDescription": "Są to miejsca na wybranych trasach do odwiedzenia. Gdy podejdziesz do obiektu na bliżej niż 100 metrów, wyświetli Ci się jego zdjęcie, nazwa, przycisk zawierający ścieżke dźwiękową do odsłuchania i możliwość zaznaczenia obiektu jako odwiedzony.",
   "@defaultDescription": {
     "description": "Opis znacznika."
   },
@@ -177,5 +177,20 @@
   "routeInfo": "Ścieżki na mapie są rysowane od punktu do punktu, nie musisz się nimi sugerować. Możesz przejść ścieżkę w trybie nawigacji jak tylko Ci się podoba.",
   "@routeInfo": {
     "description": "Informacja o ścieżkach."
+  },
+
+  "markerAlert": "Marker został odkryty!",
+  "@markerAlert": {
+    "description": "Alert po odkryciu markera."
+  },
+
+  "routeAlert": "Ścieżka została ukończona!",
+  "@routeAlert": {
+    "description": "Alert po odkryciu całej ścieżki."
+  },
+
+  "checkBox": "Odkryć ten znacznik?",
+  "@checkBox": {
+    "description": "Tekst checkboxa."
   }
 }

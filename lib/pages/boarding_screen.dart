@@ -3,6 +3,10 @@ import 'package:google_maps_app/pages/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatelessWidget {
+  final bool fromWelcome; // Dodanie parametru informującego o pochodzeniu ekranu
+
+  OnboardingScreen({required this.fromWelcome});
+
   @override
   Widget build(BuildContext context) {
     // Accessing localization strings
@@ -236,9 +240,13 @@ class OnboardingScreen extends StatelessWidget {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => MapScreen()),
-                );
+                if (fromWelcome) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => MapScreen()),
+                  );
+                } else {
+                  Navigator.of(context).pop(); // Powrót do poprzedniego ekranu
+                }
               },
               child: Text(
                 localization.startButton,

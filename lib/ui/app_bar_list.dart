@@ -3,14 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onMapIconPressed; // Funkcja wywoływana po naciśnięciu ikony mapy.
-  final VoidCallback onListIconPressed; // Funkcja wywoływana po naciśnięciu ikony listy.
 
-  const MyAppBar({
-    Key? key,
-    required this.onMapIconPressed,
-    required this.onListIconPressed,
-  }) : super(key: key);
+  const MyAppBar({Key? key,}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(56.0); // Preferowany rozmiar paska AppBar.
@@ -33,25 +27,29 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             IconButton(
               icon: Opacity(
-                opacity: 0.5, // Gdy zaznaczona - bez przeźroczystości.
+                opacity: 1, // Gdy zaznaczona - bez przeźroczystości.
                 child: SizedBox(
                   width: 20.0,
                   height: 20.0,
                   child: Image.asset('assets/images/buttonicons/list_icon.png'),
                 ),
               ),
-              onPressed: onListIconPressed, // Po naciśnięciu przejdź do listy tras.
+              onPressed: null, // Po naciśnięciu przejdź do listy tras.
             ),
             IconButton(
               icon: Opacity(
-                opacity: 1, // Gdy zaznaczona - bez przeźroczystości.
+                opacity: 0.5, // Gdy zaznaczona - bez przeźroczystości.
                 child: SizedBox(
                   width: 20.0,
                   height: 20.0,
                   child: Image.asset('assets/images/buttonicons/map_icon.png'),
                 ),
               ),
-              onPressed: null, // Po naciśnięciu przejdź do mapy.
+              onPressed: () {
+                Navigator.pop(
+                  context
+                );
+            }, // Po naciśnięciu przejdź do mapy.
             ),
           ],
         ),

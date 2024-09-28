@@ -8,47 +8,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_maps_app/services/custom_info_window.dart';
 import 'package:confetti/confetti.dart';
 
-// Logika tworzenia markerów.
+late BitmapDescriptor defaultMarker; // Podstawowy marker.
+late BitmapDescriptor discoveredMarker; // Odkryty marker.
+late BitmapDescriptor navigationMarker; // Marker w trybie nawigacji.
+late BitmapDescriptor userMarker; // Marker użytkownika (gdy nie jest w trybie nawigacji).
+late BitmapDescriptor userMarkerDiff; // Podstawowy marker (używany do aktualizacji).
 
-late BitmapDescriptor defaultMarker;
-late BitmapDescriptor bigDefaultMarker;
+List<PointModel> markers = []; // Lista obiektów PointModel, czyli wszystkie markery dostępne.
+final AudioPlayer _audioPlayer = AudioPlayer(); // Odtwarzanie dźwięku, np. po kliknięciu na audio w markerze.
 
-late BitmapDescriptor discoveredMarker;
-late BitmapDescriptor bigDiscoveredMarker;
-
-late BitmapDescriptor navigationMarker;
-
-late BitmapDescriptor userMarker;
-late BitmapDescriptor bigUserMarker;
-
-late BitmapDescriptor userMarkerDiff;
-
-List<PointModel> markers = [];
-final AudioPlayer _audioPlayer = AudioPlayer();
-
+// Funkcja odtwarzająca dźwięk.
 void _playSound(String soundFileName) async {
   await _audioPlayer.play(AssetSource('$soundFileName'));
 }
 
+// Ładuje wszystkie ikony markerów, pobiera trasy RouteMotel i tworzy listę punktów markers.
 Future<void> loadMarkers() async {
   defaultMarker = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(size: Size(100, 100)),
     'assets/images/markers/default_marker.png',
   );
 
-  bigDefaultMarker = await BitmapDescriptor.fromAssetImage(
-    const ImageConfiguration(size: Size(100, 100)),
-    'assets/images/markers/big_default_marker.png',
-  );
-
   discoveredMarker = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(size: Size(100, 100)),
     'assets/images/markers/discovered_marker.png',
-  );
-
-  bigDiscoveredMarker = await BitmapDescriptor.fromAssetImage(
-    const ImageConfiguration(size: Size(100, 100)),
-    'assets/images/markers/big_discovered_marker.png',
   );
 
   navigationMarker = await BitmapDescriptor.fromAssetImage(
@@ -59,11 +42,6 @@ Future<void> loadMarkers() async {
   userMarker = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(size: Size(100, 100)),
     'assets/images/markers/user_marker.png',
-  );
-
-  bigUserMarker = await BitmapDescriptor.fromAssetImage(
-    const ImageConfiguration(size: Size(100, 100)),
-    'assets/images/markers/big_user_marker.png',
   );
 
   userMarkerDiff = await BitmapDescriptor.fromAssetImage(
@@ -77,6 +55,7 @@ Future<void> loadMarkers() async {
   await _initializeDiscoveredStates(markers);
 }
 
+// Pobiera zapisane w pamięci dane (SharedPrefernces), aby określić które markery są już odkryte.
 Future<void> _initializeDiscoveredStates(List<PointModel> points) async {
   final prefs = await SharedPreferences.getInstance();
   for (var point in points) {
@@ -84,6 +63,7 @@ Future<void> _initializeDiscoveredStates(List<PointModel> points) async {
   }
 }
 
+// Tworzy markery dla wybranej trasy, marker zmienia wielkość w zależności czy odkryty, wywołuje showCustomInfoWindow po kliknięciu w marker.
 Set<Marker> buildMarkers(
   int _centeredRouteId,
   CustomInfoWindowController customInfoWindowController,
@@ -105,7 +85,7 @@ Set<Marker> buildMarkers(
       position: LatLng(marker.latitude, marker.longitude),
       icon: marker.isDiscovered
           ? discoveredMarker
-          : defaultMarker, // Zmieniaj ikonę, jeśli marker odkryty
+          : defaultMarker,
       onTap: () {
         showCustomInfoWindow(
           marker,
@@ -119,13 +99,13 @@ Set<Marker> buildMarkers(
           _routes,
           _updateDiscoveryState,
           _updateMarkerInfo,
-          
         );
       },
     );
   }).toSet();
 }
 
+// Rozszerza klasę Marker i tworzy marker użytkownika.
 class UserLocationMarker extends Marker {
   UserLocationMarker({
     required LatLng position,
@@ -136,7 +116,6 @@ class UserLocationMarker extends Marker {
           position: position,
           icon: icon,
           onTap: () {
-            // Wyświetlamy custom info window z tekstem "Jesteś tutaj!"
             customInfoWindowController.addInfoWindow!(
               Container(
                 padding: const EdgeInsets.all(8.0),
@@ -159,7 +138,7 @@ class UserLocationMarker extends Marker {
                   ),
                 ),
               ),
-              position, // Pozycja markera użytkownika
+              position, 
             );
           },
         );

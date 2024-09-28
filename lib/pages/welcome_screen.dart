@@ -14,20 +14,21 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  late AnimationController _buttonController;
-  late Animation<Offset> _buttonSlideAnimation;
+  late AnimationController _controller; // Kontroler animacji dla logo.
+  // ignore: unused_field
+  late Animation<double> _animation; // Animacja przejścia dla logo.
+  late AnimationController _buttonController; // Kontroler animacji dla przycisków języka.
+  late Animation<Offset> _buttonSlideAnimation; // Animacja dla przycisków języka.
 
-  bool _showButtons = false; 
-  bool _isFirstLaunch = true; 
+  bool _showButtons = false; // Flaga, czy przyciski mają być widoczne.
+  bool _isFirstLaunch = true; // Flaga, czy jest to pierwsze uruchomienie aplikacji.
 
   @override
   void initState() {
     super.initState();
-    _checkFirstLaunch();
+    _checkFirstLaunch(); // Sprawdź czy pierwsze uruchomienie.
 
-    // Logo animation
+    // Konfiguracja animacji dla logo.
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -37,7 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    // Buttons slide up animation
+    // Konfiguracja animacji dla przycisków języka.
     _buttonController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -47,8 +48,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeOut));
 
-    _controller.forward();
+    _controller.forward(); // Rozpoczęcie animacji dla logo.
 
+    // Listener, który reaguje gdy animacja logo się zakończy, jeżeli jest to pierwsze uruchomienie to wyświetla wybór języka.
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed && _isFirstLaunch) {
         setState(() {
@@ -61,6 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     });
   }
 
+  // Funkcja sprawdzająca czy to pierwsze uruchomienie aplikacji.
   Future<void> _checkFirstLaunch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? firstLaunch = prefs.getBool('firstLaunch');
@@ -77,6 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     }
   }
 
+  // Funkcja wywoływana po wyborze języka, zapisuje wybrany język lokalnie, ustawia nowy i przechodzi do następnego ekranu.
   Future<void> _onLanguageSelected(String languageCode) async {
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -88,6 +92,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     _navigateWithSlide();
   }
 
+  // Zakończenia kontrolerów.
   @override
   void dispose() {
     _controller.dispose();
@@ -95,12 +100,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     super.dispose();
   }
 
+  // Funkcja przechodząca do następnej strony.
   void _navigateWithSlide() {
   Navigator.pushReplacement(
     context,
     PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
-        return _isFirstLaunch ? OnboardingScreen() : MapScreen();
+        return _isFirstLaunch ? OnboardingScreen(fromWelcome: true) : MapScreen();
       },
       transitionDuration: const Duration(milliseconds: 300),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -113,6 +119,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   );
 }
 
+  // Funkcja budująca przycisk wyboru języka.
   Widget _buildLanguageButton(String label, String flagAsset, String languageCode) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
@@ -185,13 +192,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                   children: [
                     _buildLanguageButton(
                       'Polski',
-                      'assets/images/poland_flag.png',
+                      'assets/images/buttonicons/poland_icon.png',
                       'pl',
                     ),
                     const SizedBox(height: 20),
                     _buildLanguageButton(
                       'English',
-                      'assets/images/uk_flag.png',
+                      'assets/images/buttonicons/england_icon.png',
                       'en',
                     ),
                   ],

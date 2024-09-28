@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
+import 'package:google_maps_app/ui/app_bar_list.dart';
 
 class RouteListScreen extends StatelessWidget {
-  final List<RouteModel> routes;
-  final int? initialRouteId;
-  final int? selectedPointId;
-  final int discoveredMarkers; // Nowe parametry
-  final int totalMarkers;
+  final List<RouteModel> routes; // Lista tras.
+  final int? initialRouteId; // Identyfikator początkowej trasy.
+  final int? selectedPointId; // Identyfikator wybranego punktu trasy.
+  final int discoveredMarkers; // Liczba odkrytych markerów.
+  final int totalMarkers; // Całkowita liczba markerów.
 
   const RouteListScreen({
     Key? key,
     required this.routes,
     this.initialRouteId,
     this.selectedPointId,
-    required this.discoveredMarkers, // Dodano required
+    required this.discoveredMarkers,
     required this.totalMarkers,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(
+      ),
       body: ListView.builder(
         itemCount: routes.length,
         itemBuilder: (context, index) {
@@ -30,15 +33,14 @@ class RouteListScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: ExpansionTile(
               initiallyExpanded: route.id == initialRouteId,
-              textColor: Color.fromRGBO(77, 182, 172, 1),
-              iconColor: Color.fromRGBO(77, 182, 172, 1),
+              textColor: Colors.blueAccent,
+              iconColor: Colors.blueAccent,
               title: Row(
                 children: [
                   Expanded(
                     child: Text(
                       route.name,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -55,16 +57,12 @@ class RouteListScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0), // Dodaje przesunięcie w prawo
+                      padding: const EdgeInsets.only(left: 16.0),
                       child: ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16.0),
-                        tileColor:
-                            isSelected ? Color.fromRGBO(77, 182, 172, 1) : null,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        tileColor: isSelected ? Colors.blueAccent : null,
                         title: Row(
                           children: [
-                            // Obrazek punktu
                             SizedBox(
                               width: 80,
                               height: 80,
@@ -75,10 +73,8 @@ class RouteListScreen extends StatelessWidget {
                                     )
                                   : Container(
                                       color: Colors.grey[200],
-                                      child: const Icon(
-                                          Icons.image_not_supported,
-                                          size: 60,
-                                          color: Colors.grey),
+                                      child: const Icon(Icons.image_not_supported,
+                                          size: 60, color: Colors.grey),
                                     ),
                             ),
                             const SizedBox(width: 10),
@@ -99,8 +95,7 @@ class RouteListScreen extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 4.0),
                                       child: Text(
                                         point.description!,
-                                        style:
-                                            TextStyle(color: Colors.grey[600]),
+                                        style: TextStyle(color: Colors.grey[600]),
                                       ),
                                     ),
                                 ],
@@ -109,7 +104,6 @@ class RouteListScreen extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
-                          // Wyświetl szczegółowy opis w modalnym oknie
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
@@ -150,12 +144,11 @@ class RouteListScreen extends StatelessWidget {
                                     const SizedBox(height: 20),
                                     ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context); // Zamknij modalne okno
+                                        Navigator.pop(context); // Zamknij modalne okno
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            Color.fromRGBO(77, 182, 172, 1),
+                                            Colors.blueAccent,
                                       ),
                                       child: const Text('Zamknij'),
                                     ),

@@ -6,6 +6,79 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:google_maps_app/models/globals.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+void showMarkerDiscoveryNotification(BuildContext context) {
+  final overlay = Overlay.of(context);
+  final overlayEntry = OverlayEntry(
+    builder: (context) => Center(
+      child: AnimatedOpacity(
+        opacity: 1.0,
+        duration: Duration(milliseconds: 300),
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+            decoration: BoxDecoration(
+              color: Colors.black54,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.markerAlert,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(overlayEntry);
+
+  // Po sekundzie zniknij
+  Future.delayed(Duration(seconds: 2), () {
+    overlayEntry.remove();
+  });
+}
+
+void showRouteDiscoveryNotification(BuildContext context) {
+  final overlay = Overlay.of(context);
+  final overlayEntry = OverlayEntry(
+    builder: (context) => Center(
+      child: AnimatedOpacity(
+        opacity: 1.0,
+        duration: Duration(milliseconds: 300),
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+            decoration: BoxDecoration(
+              color: Colors.greenAccent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.routeAlert,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(overlayEntry);
+
+  // Po sekundzie zniknij
+  Future.delayed(Duration(seconds: 2), () {
+    overlayEntry.remove();
+  });
+}
 
 void showCustomInfoWindow(
     PointModel marker,
@@ -18,29 +91,32 @@ void showCustomInfoWindow(
     int centeredRouteId,
     List<RouteModel> routes,
     Function updateDiscoveryState,
-    Function updateMarkerInfo) {
+    Function updateMarkerInfo,
+) {
+  bool isCheckboxPreviouslyChecked = marker.isDiscovered;
+  bool shouldShowCheckbox = marker.isDiscovered || isNavigationActive;
+
   customInfoWindowController.addInfoWindow!(
     StatefulBuilder(
       builder: (context, setState) {
         final double windowWidth = 300;
-        final double windowHeight = 100;
+        final double windowHeight = 150;
+
+        // Kolor tła na podstawie stanu odkrycia
+        Color backgroundColor = marker.isDiscovered ? Colors.greenAccent : Colors.white;
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(16.0),
           width: windowWidth,
           height: windowHeight,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.lightBlueAccent.shade100, Colors.white],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(16),
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(20), // Zaokrąglone rogi
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 15,
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
             ],
@@ -53,6 +129,13 @@ void showCustomInfoWindow(
                 height: windowWidth * 0.45,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: marker.imagePath != null
                     ? ClipRRect(
@@ -76,7 +159,7 @@ void showCustomInfoWindow(
                         ),
                       ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12), // Większa przerwa między obrazkiem a tekstem
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,7 +168,7 @@ void showCustomInfoWindow(
                       marker.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Colors.blueGrey[900],
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -104,54 +187,45 @@ void showCustomInfoWindow(
                           }
                         },
                       ),
-                      const SizedBox(width: 6),
-                      IconButton(
-                        icon: const Icon(Icons.info_outline),
-                        color: Colors.teal,
-                        onPressed: () {
-                          setState(() {
-                            // Update the state to show the route list
-                          });
-                        },
-                      ),
                     ],
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
-              if (isNavigationActive)
+              const SizedBox(height: 8),
+              if (shouldShowCheckbox)
                 AnimatedOpacity(
-                  opacity: isNavigationActive ? 1.0 : 0.0,
+                  opacity: shouldShowCheckbox ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 300),
                   child: CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
                     value: marker.isDiscovered,
-                    title: const Text('Odkryłeś ten znacznik?',
+                    title: Text(AppLocalizations.of(context)!.checkBox,
                         style: TextStyle(fontSize: 14)),
                     onChanged: (bool? value) async {
                       setState(() {
                         marker.isDiscovered = value ?? false;
 
-                        final route =
-                            routes.firstWhere((r) => r.id == centeredRouteId);
-                        final index =
-                            route.points.indexWhere((p) => p.id == marker.id);
-                        if (index != -1) {
-                          route.points[index] = marker;
+                        if (marker.isDiscovered && !isCheckboxPreviouslyChecked) {
+                          final route = routes.firstWhere((r) => r.id == centeredRouteId);
+                          final index = route.points.indexWhere((p) => p.id == marker.id);
+                          if (index != -1) {
+                            route.points[index] = marker;
+                          }
+
+                          bool allDiscovered = route.points.every((p) => p.isDiscovered);
+                          if (allDiscovered) {
+                            confettiControllerBig.play();
+                            showRouteDiscoveryNotification(context); 
+                          } else {
+                            confettiControllerSmall.play();
+                            showMarkerDiscoveryNotification(context);
+                          }
                         }
 
-                        bool allDiscovered =
-                            route.points.every((p) => p.isDiscovered);
-
-                        if (allDiscovered) {
-                          confettiControllerBig.play();
-                        } else {
-                          confettiControllerSmall.play();
-                        }
+                        isCheckboxPreviouslyChecked = marker.isDiscovered;
                       });
 
-                      await updateDiscoveryState(
-                          marker.id, marker.isDiscovered);
+                      await updateDiscoveryState(marker.id, marker.isDiscovered);
                       updateMarkerInfo();
                     },
                   ),
@@ -164,3 +238,6 @@ void showCustomInfoWindow(
     LatLng(marker.latitude, marker.longitude),
   );
 }
+
+
+

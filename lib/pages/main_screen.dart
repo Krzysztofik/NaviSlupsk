@@ -20,8 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_app/providers/locale_provider.dart';
 import 'package:google_maps_app/services/custom_info_window.dart';
-
-enum ScreenState { mapState, routeListState }
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -32,7 +31,6 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen>
     with SingleTickerProviderStateMixin {
-  ScreenState currentScreenState = ScreenState.mapState;
   late GoogleMapController mapController;
   late ConfettiController confettiControllerSmall;
   late ConfettiController confettiControllerBig;
@@ -77,6 +75,31 @@ class MapScreenState extends State<MapScreen>
     });
   }
 
+  void _changeLanguage(String value) {
+    setState(() {
+      final globals = Globals();
+      globals.setLanguageCode(value); // Update the language code in globals
+
+      // Update the locale in the provider
+      final localeProvider =
+          Provider.of<LocaleProvider>(context, listen: false);
+      Locale newLocale = Locale.fromSubtags(languageCode: value);
+      print(
+          'User selected locale: ${newLocale.languageCode}'); // Log user selected locale
+      localeProvider.setLocale(newLocale);
+
+      // Save the selected language code to SharedPreferences
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.setString('selectedLanguageCode', value);
+      });
+    });
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MapScreen()),
+    );
+  }
+
   //MAPA GOOGLE
   Widget _buildMap() {
     return Stack(
@@ -86,7 +109,7 @@ class MapScreenState extends State<MapScreen>
           onMapCreated: (GoogleMapController controller) {
             mapController = controller;
             customInfoWindowController.googleMapController = controller;
-           _updatePolylines(); // Wywołaj aktualizację polilinii po stworzeniu mapy
+            _updatePolylines(); // Wywołaj aktualizację polilinii po stworzeniu mapy
           },
           initialCameraPosition: const CameraPosition(
             target: LatLng(54.4643, 17.0282), // Koordynaty centrum Słupska.
@@ -120,6 +143,7 @@ class MapScreenState extends State<MapScreen>
           polylines: _polylines,
           onTap: (position) {
             customInfoWindowController.hideInfoWindow!();
+            _checkMarkersInRange();
           },
           onCameraMove: (position) {
             customInfoWindowController.onCameraMove!();
@@ -127,10 +151,8 @@ class MapScreenState extends State<MapScreen>
         ),
         CustomInfoWindow(
           controller: customInfoWindowController,
-          height:
-              MediaQuery.of(context).size.height * 0.35, // 40% wysokości ekranu
-          width:
-              MediaQuery.of(context).size.width * 0.75, // 75% szerokości ekranu
+          height: 292,
+          width: 300,
         ),
         AnimatedPositioned(
           duration: const Duration(milliseconds: 500),
@@ -186,8 +208,28 @@ class MapScreenState extends State<MapScreen>
                 elevation: 0,
                 mini: true,
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => OnboardingScreen()),
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          OnboardingScreen(fromWelcome: false),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin =
+                            Offset(0.0, -1.0); // Start from the bottom
+                        const end = Offset.zero; // End at the current position
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
                   );
                 },
                 child: Image.asset(
@@ -196,62 +238,42 @@ class MapScreenState extends State<MapScreen>
                 backgroundColor: Colors.transparent,
               ),
               const SizedBox(width: 10),
-              PopupMenuButton<String>(
-                icon: Container(
-                  width: 48, // Ustaw rozmiar ikony dla popup
-                  height: 48,
-                  child: Image.asset(
-                    'assets/images/buttonicons/language_icon.png',
-                    fit: BoxFit.cover, // Wypełnia kontener
-                  ),
+              SpeedDial(
+                direction: SpeedDialDirection.down,
+                child: Image.asset(
+                  'assets/images/buttonicons/language_icon.png', // Główna ikona języka
+                  width: 40,
+                  height: 40,
                 ),
-                itemBuilder: (context) => [
-                  PopupMenuItem<String>(
-                    value: 'pl',
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                overlayColor: Colors.transparent,
+                overlayOpacity: 0.0,
+                animationCurve: Curves.elasticInOut,
+                animationDuration: Duration(milliseconds: 300),
+                children: [
+                  SpeedDialChild(
                     child: Image.asset(
-                      'assets/images/buttonicons/poland_icon.png',
-                      width: 32, // Rozmiar ikony
-                      height: 32,
+                      'assets/images/buttonicons/poland_icon.png', // Ikona Polski
+                      width: 40,
+                      height: 40,
                     ),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    onTap: () => _changeLanguage('pl'),
                   ),
-                  PopupMenuItem<String>(
-                    value: 'en',
+                  SpeedDialChild(
                     child: Image.asset(
-                      'assets/images/buttonicons/england_icon.png',
-                      width: 32, // Rozmiar ikony
-                      height: 32,
+                      'assets/images/buttonicons/england_icon.png', // Ikona Anglii
+                      width: 40,
+                      height: 40,
                     ),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    onTap: () => _changeLanguage('en'),
                   ),
                 ],
-                onSelected: (value) {
-                  setState(() {
-                    final globals = Globals();
-
-                    globals.setLanguageCode(
-                        value); // Update the language code in globals
-
-                    // Update the locale in the provider
-                    final localeProvider =
-                        Provider.of<LocaleProvider>(context, listen: false);
-                    Locale newLocale = Locale.fromSubtags(languageCode: value);
-                    print(
-                        'User selected locale: ${newLocale.languageCode}'); // Log user selected locale
-                    localeProvider.setLocale(newLocale);
-
-                    // Save the selected language code to SharedPreferences
-                    SharedPreferences.getInstance().then((prefs) {
-                      prefs.setString('selectedLanguageCode', value);
-                    });
-                  });
-
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MapScreen()),
-                  );
-                },
-                elevation: 8, // Ustawienie cienia dla menu
-                offset: Offset(0, 50), // Pozycja menu
-              ),
+              )
             ],
           ),
         ),
@@ -269,11 +291,32 @@ class MapScreenState extends State<MapScreen>
             discoveredMarkers: _discoveredMarkers,
             totalMarkers: _totalMarkers,
             onListIconPressed: () {
-              setState(() {
-                currentScreenState = ScreenState.routeListState;
-                isBottomMenuVisible =
-                    false; // Ukryj dolne menu, gdy widok to lista tras
-              });
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      RouteListScreen(
+                    routes: _routes,
+                    discoveredMarkers: _discoveredMarkers,
+                    totalMarkers: _totalMarkers,
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    const begin = Offset(0.0, -1.0); // Start from the bottom
+                    const end = Offset.zero; // End at the current position
+                    const curve = Curves.easeInOut;
+
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
           ),
         ),
@@ -338,197 +381,62 @@ class MapScreenState extends State<MapScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        onMapIconPressed: () {
-          setState(() {
-            currentScreenState = ScreenState.mapState;
-            isBottomMenuVisible = true; // Pokazuj menu na dole na mapie
-          });
-        },
-        onListIconPressed: () {
-          setState(() {
-            currentScreenState = ScreenState.routeListState;
-            isBottomMenuVisible = false; // Ukryj dolne menu na liście
-          });
-        },
-        currentScreenState: currentScreenState,
-      ),
-      body: currentScreenState == ScreenState.mapState
-          ? _buildMap()
-          : _buildRouteList(),
-    );
+        appBar: MyAppBar(
+          onMapIconPressed: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MapScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0); // Start from the right
+                  const end = Offset.zero; // End at the current position
+                  const curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  var offsetAnimation = animation.drive(tween);
+
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
+              ),
+            );
+          },
+          onListIconPressed: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    RouteListScreen(
+                  routes: _routes,
+                  discoveredMarkers: _discoveredMarkers,
+                  totalMarkers: _totalMarkers,
+                ),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(0.0, -1.0); // Start from the bottom
+                  const end = Offset.zero; // End at the current position
+                  const curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  var offsetAnimation = animation.drive(tween);
+
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        body: _buildMap());
   }
-
-  //BUILD ROUTE_LIST
-  Widget _buildRouteList() {
-    return RouteListScreen(
-      routes: _routes,
-      initialRouteId: _centeredRouteId,
-      discoveredMarkers: _discoveredMarkers,
-      totalMarkers: _totalMarkers,
-    );
-  }
-
-  //WYŚWIETL KAFELEK NAD MARKEREM
-  // void showCustomInfoWindow(PointModel marker, CustomInfoWindowController) {
-  //   customInfoWindowController.addInfoWindow!(
-  //     StatefulBuilder(
-  //       builder: (context, setState) {
-  //         final double windowWidth = 300;
-  //         // 75% szerokości ekranu
-  //         final double windowHeight = 100;
-  //         // 35% wysokości ekranu
-
-  //         return AnimatedContainer(
-  //           duration: const Duration(milliseconds: 300),
-  //           padding: const EdgeInsets.all(12.0),
-  //           width: windowWidth,
-  //           height: windowHeight,
-  //           decoration: BoxDecoration(
-  //             gradient: LinearGradient(
-  //               colors: [Colors.lightBlueAccent.shade100, Colors.white],
-  //               begin: Alignment.topLeft,
-  //               end: Alignment.bottomRight,
-  //             ),
-  //             borderRadius: BorderRadius.circular(16),
-  //             boxShadow: [
-  //               BoxShadow(
-  //                 color: Colors.black.withOpacity(0.25),
-  //                 blurRadius: 15,
-  //                 offset: const Offset(0, 5),
-  //               ),
-  //             ],
-  //           ),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               // Image section
-  //               Container(
-  //                 width: double.infinity,
-  //                 height: windowWidth * 0.45, // Proporcjonalna wysokość
-  //                 decoration: BoxDecoration(
-  //                   borderRadius: BorderRadius.circular(12),
-  //                 ),
-  //                 child: marker.imagePath != null
-  //                     ? ClipRRect(
-  //                         borderRadius: BorderRadius.circular(12),
-  //                         child: Image.asset(
-  //                           marker.imagePath!,
-  //                           fit: BoxFit.cover,
-  //                         ),
-  //                       )
-  //                     : Container(
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.grey[300],
-  //                           borderRadius: BorderRadius.circular(12),
-  //                         ),
-  //                         child: Center(
-  //                           child: Icon(
-  //                             Icons.image_not_supported,
-  //                             size: 50,
-  //                             color: Colors.grey[500],
-  //                           ),
-  //                         ),
-  //                       ),
-  //               ),
-  //               const SizedBox(height: 10),
-  //               // Name and Actions
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Expanded(
-  //                     child: Text(
-  //                       marker.name,
-  //                       style: TextStyle(
-  //                         fontWeight: FontWeight.bold,
-  //                         fontSize: 16,
-  //                         color: Colors.blueGrey[900],
-  //                       ),
-  //                       overflow: TextOverflow.ellipsis,
-  //                     ),
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       IconButton(
-  //                         icon: const Icon(
-  //                           Icons.volume_up,
-  //                           color: Colors.teal,
-  //                         ),
-  //                         onPressed: () {
-  //                           if (isSoundEnabled && marker.audioPath != null) {
-  //                             _playSound(marker.audioPath!);
-  //                           }
-  //                         },
-  //                       ),
-  //                       const SizedBox(width: 6),
-  //                       IconButton(
-  //                         icon: const Icon(Icons.info_outline),
-  //                         color: Colors.teal,
-  //                         onPressed: () {
-  //                           setState(() {
-  //                             currentScreenState = ScreenState.routeListState;
-  //                             isBottomMenuVisible =
-  //                                 false; // Ukryj dolne menu, gdy widok to lista tras
-  //                           });
-  //                         },
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 5),
-  //               // Checkbox (only visible when navigation is active)
-  //               if (isNavigationActive)
-  //                 AnimatedOpacity(
-  //                   opacity: isNavigationActive ? 1.0 : 0.0,
-  //                   duration: const Duration(milliseconds: 300),
-  //                   child: CheckboxListTile(
-  //                     contentPadding: EdgeInsets.zero,
-  //                     value: marker.isDiscovered,
-  //                     title: const Text('Odkryłeś ten znacznik?',
-  //                         style: TextStyle(fontSize: 14)),
-  //                     onChanged: (bool? value) async {
-  //                       setState(() {
-  //                         marker.isDiscovered = value ?? false;
-
-  //                         // Uaktualnij listę markerów w kolekcji
-  //                         final route = _routes
-  //                             .firstWhere((r) => r.id == _centeredRouteId);
-  //                         final index =
-  //                             route.points.indexWhere((p) => p.id == marker.id);
-  //                         if (index != -1) {
-  //                           route.points[index] =
-  //                               marker; // Zaktualizuj obiekt markera w liście
-  //                         }
-
-  //                         // Sprawdź, czy wszystkie punkty na trasie są odkryte
-  //                         bool allDiscovered =
-  //                             route.points.every((p) => p.isDiscovered);
-
-  //                         if (allDiscovered) {
-  //                           // Wszystkie markery zostały odkryte, uruchom duże konfetti
-  //                           confettiControllerBig.play();
-  //                         } else {
-  //                           // Uruchom małe konfetti
-  //                           confettiControllerSmall.play();
-  //                         }
-  //                       });
-
-  //                       // Uaktualnij stan w SharedPreferences
-  //                       await _updateDiscoveryState(
-  //                           marker.id, marker.isDiscovered);
-  //                       _updateMarkerInfo();
-  //                     },
-  //                   ),
-  //                 ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //     LatLng(marker.latitude, marker.longitude),
-  //   );
-  // }
 
   //SCHOWAJ KAFELEK INFOWINDOW NAD MARKEREM
   void _hideInfoWindow() {
@@ -638,7 +546,9 @@ class MapScreenState extends State<MapScreen>
           setState(() {
             _currentUserLocation = position;
           });
-        _updatePolylines(); // Aktualizuj polilinie po zmianie lokalizacji
+        _updatePolylines();
+        
+        _checkMarkersInRange();
       });
     }
   }
@@ -686,7 +596,7 @@ class MapScreenState extends State<MapScreen>
       );
 
       // Sprawdź, czy marker jest w zasięgu użytkownika (150 metrów)
-      if (distance <= 150 &&
+      if (distance <= 50 &&
           !marker.isDiscovered &&
           isNavigationActive == true) {
         // Sprawdź, czy marker jest w aktualnym widocznym regionie mapy
@@ -799,6 +709,7 @@ class MapScreenState extends State<MapScreen>
   void onPageChanged(int routeId) {
     setState(() {
       _centeredRouteId = routeId;
+      isInfoVisible = false;
     });
     _updatePolylines();
     _compassSubscription?.cancel();

@@ -8,7 +8,7 @@
     "naviSection": "Navigation in the top right corner",
     "compassSection": "Before you start navigating, calibrate your compass.",
     "defaultTitle": "Places to visit",
-    "defaultDescription": "These are places to visit on selected routes. When you approach an object closer than 30 meters, its photo, name, a button with an audio path to listen to, a button leading to more information on a separate screen, and the option to mark the object as visited will be displayed.",
+    "defaultDescription": "These are places to visit on selected routes. When you approach an object closer than 100 meters, its photo, name, a button with an audio path to listen to and the option to mark the object as visited will be displayed.",
     "discoveredTitle": "Already visited places",
     "discoveredDescription": "The place you have visited will change its marker to this one. The route will no longer guide you through marked objects until you undo the visit. You can do this by clicking on the visited object and unchecking it.",
     "userTitle": "Your icon on the map",
@@ -34,5 +34,8 @@
     "listTitle": "Route list screen",
     "listDescription": "Clicking this will take you to the screen where your route list is displayed, with the currently selected route expanded from your menu.",
     "startButton": "Get started",
-    "routeInfo": "The paths on the map are drawn from point to point, but you don't have to follow them exactly. You can navigate the route however you like."
+    "routeInfo": "The paths on the map are drawn from point to point, but you don't have to follow them exactly. You can navigate the route however you like.",
+    "markerAlert": "Marker discovered!",
+    "routeAlert": "This route is finished!",
+    "checkBox": "Discover this marker?"
 }

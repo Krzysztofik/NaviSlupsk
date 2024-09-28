@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
 class BottomMenu extends StatefulWidget {
-  final void Function(int) onPageChanged;
-  final bool isVisible;
-  final VoidCallback onHideInfoWindow;
-  final VoidCallback onNavigate;
-  final VoidCallback onMarkerInfoUpdate;
-  final VoidCallback onStop;
-  final int discoveredMarkers;
-  final int totalMarkers;
-  final VoidCallback onListIconPressed;
+  final void Function(int) onPageChanged; // Funkcja wywoływana, gdy zmienia się PageView.
+  final bool isVisible; // Czy menu ma być widoczne? Domyślnie true.
+  final VoidCallback onHideInfoWindow; // Funkcja ukrywająca okienko nad markerem.
+  final VoidCallback onNavigate; // Funkcja wywoływana po rozpoczęciu nawigacji.
+  final VoidCallback onMarkerInfoUpdate; // Funkcja wywoływana po aktualizacji info o markerze.
+  final VoidCallback onStop; // Funkcja wywoływana po zakończeniu nawigacji.
+  final int discoveredMarkers; // Liczba odkrytych markerów.
+  final int totalMarkers; // Liczba wszystkich markerów.
+  final VoidCallback onListIconPressed; // Funkcja wywoływana po naciśnięciu szczegółów trasy.
 
   const BottomMenu(
       {Key? key,
@@ -30,11 +30,12 @@ class BottomMenu extends StatefulWidget {
 }
 
 class _BottomMenuState extends State<BottomMenu> {
-  List<RouteModel> menus = [];
-  final PageController _pageController = PageController(viewportFraction: 0.7);
+  List<RouteModel> menus = []; // Lista obiektów RouteModel, dostępne trasy.
+  final PageController _pageController = PageController(viewportFraction: 0.7); // Kontroler przewijania elementów w PageView.
 
-  bool isNavigating = true;
+  bool isNavigating = true; // Flaga nawigacji (start/stop).
 
+  // Inicjuje ładowanie tras i nasłuchuje zmian strony w PageView.
   @override
   void initState() {
     super.initState();
@@ -42,12 +43,14 @@ class _BottomMenuState extends State<BottomMenu> {
     _pageController.addListener(_onPageChanged);
   }
 
+  // Usuwa kontroler strony, aby uniknąć wycieków pamięci.
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
   }
 
+  // Asynchronicznie ładuje trasy z modelu RouteModel i aktualizuje stan komponentu.
   Future<void> _loadRoutes() async {
     final loadedRoutes = await RouteModel.getRoutes();
     setState(() {
@@ -55,6 +58,7 @@ class _BottomMenuState extends State<BottomMenu> {
     });
   }
 
+  // Sprawdza, która strona w PageView jest aktualnie wyświetlana i aktualizuje stan nawigacji.
   void _onPageChanged() {
     final double currentPage = _pageController.page ?? 0;
     final int roundedPage = currentPage.round();
@@ -69,7 +73,6 @@ class _BottomMenuState extends State<BottomMenu> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -132,79 +135,96 @@ class _BottomMenuState extends State<BottomMenu> {
                       ),
                     ),
                     Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Padding(
-      padding: const EdgeInsets.only(left: 0),
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            if (isNavigating) {
-              widget.onNavigate(); // Wywołaj funkcję onNavigate
-            } else {
-              widget.onStop(); // Wywołaj funkcję onStop
-            }
-            isNavigating = !isNavigating; // Zmień stan na przeciwny
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, // Białe wypełnienie przycisku
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
-            side: BorderSide(
-              color: isNavigating ? Colors.green : Colors.red, // Kolor obramowania
-              width: 1, // Grubość obramowania
-            ),
-          ),
-          padding: EdgeInsets.symmetric(
-            vertical: 5,
-            horizontal: 18,
-          ),
-          elevation: 3, // Efekt podniesienia
-          shadowColor: isNavigating ? Colors.green : Colors.red, // Kolor cienia
-        ),
-        child: Text(
-          isNavigating ? 'Start' : 'Stop', // Tekst przycisku
-          style: TextStyle(
-            color: isNavigating ? Colors.green : Colors.red, // Kolor tekstu
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    ),
-    SizedBox(width: 10), // Odstęp pomiędzy przyciskami
-    ElevatedButton(
-      onPressed: () {
-        widget.onListIconPressed(); // Wywołaj funkcję dla przycisku Info
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white, // Białe wypełnienie dla przycisku Info
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
-          side: BorderSide(
-            color: Colors.blue, // Obramowanie w kolorze przycisku Info
-            width: 1, // Grubość obramowania
-          ),
-        ),
-        padding: EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 18,
-        ),
-        elevation: 3, // Efekt podniesienia
-        shadowColor: Colors.blueAccent, // Kolor cienia
-      ),
-      child: Text(
-        'Info', // Tekst na przycisku Info
-        style: TextStyle(
-          color: Colors.blue, // Niebieski tekst, aby pasował do obramowania
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  ],
-)
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                if (isNavigating) {
+                                  widget
+                                      .onNavigate(); 
+                                } else {
+                                  widget.onStop(); 
+                                }
+                                isNavigating =
+                                    !isNavigating; 
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Colors.white, 
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    8), 
+                                side: BorderSide(
+                                  color: isNavigating
+                                      ? Colors.green
+                                      : Colors.red, 
+                                  width: 1, 
+                                ),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 18,
+                              ),
+                              elevation: 3, 
+                              shadowColor: isNavigating
+                                  ? Colors.green
+                                  : Colors.red, 
+                            ),
+                            child: Text(
+                              isNavigating
+                                  ? 'Start'
+                                  : 'Stop', 
+                              style: TextStyle(
+                                color: isNavigating
+                                    ? Colors.green
+                                    : Colors.red, 
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10), 
+                        ElevatedButton(
+                          onPressed: () {
+                            widget
+                                .onListIconPressed(); 
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors
+                                .white, 
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8), 
+                              side: BorderSide(
+                                color: Colors
+                                    .blue,
+                                width: 1, 
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 18,
+                            ),
+                            elevation: 3, 
+                            shadowColor: Colors.blueAccent, 
+                          ),
+                          child: Text(
+                            'Info', 
+                            style: TextStyle(
+                              color: Colors
+                                  .blue, 
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
