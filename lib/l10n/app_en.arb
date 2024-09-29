@@ -37,5 +37,8 @@
     "routeInfo": "The paths on the map are drawn from point to point, but you don't have to follow them exactly. You can navigate the route however you like.",
     "markerAlert": "Marker discovered!",
     "routeAlert": "This route is finished!",
-    "checkBox": "Discover this marker?"
+    "checkBox": "Discover this marker?",
+    "localizationAlertTitle": "Location permissions required",
+    "localizationAlertDescription": "To use navigation, you need to share your location. After clicking the button below, you will have the opportunity to share it again.",
+    "localizationAlertButton": "Proceed"
 }

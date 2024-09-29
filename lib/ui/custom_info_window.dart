@@ -3,7 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_app/providers/audio_provider.dart';
 
@@ -101,7 +100,7 @@ void showCustomInfoWindow(
                       IconButton(
                         icon: const Icon(
                           Icons.volume_up,
-                          color: Colors.teal,
+                          color: Colors.blueAccent,
                         ),
                         onPressed: () {
                           // Uzyskaj dostęp do AudioState za pomocą Provider

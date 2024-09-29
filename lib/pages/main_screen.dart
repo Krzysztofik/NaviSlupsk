@@ -449,18 +449,17 @@ class MapScreenState extends State<MapScreen>
           false, // Użytkownik musi nacisnąć przycisk, aby zamknąć
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Brak uprawnień do lokalizacji'),
+          title: Text(AppLocalizations.of(context)!.localizationAlertTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Text(
-                    'Aby korzystać z nawigacji, musisz udostępnić swoją lokalizację. Po kliknięciu na przycisk poniżej będziesz miał ponownie możliwość jej udostępnienia.'),
+                 Text(AppLocalizations.of(context)!.localizationAlertDescription),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Przejdź dalej'),
+              child: Text(AppLocalizations.of(context)!.localizationAlertButton),
               onPressed: () {
                 Navigator.of(context).pop();
                 _requestLocationPermission();

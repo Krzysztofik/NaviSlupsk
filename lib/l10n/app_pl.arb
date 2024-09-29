@@ -192,5 +192,20 @@
   "checkBox": "Odkryć ten znacznik?",
   "@checkBox": {
     "description": "Tekst checkboxa."
+  },
+  
+  "localizationAlertTitle": "Brak uprawnień do lokalizacji",
+  "@localizationAlertTitle": {
+    "description": "Tytuł alertu o lokalizacji."
+  },
+
+  "localizationAlertDescription": "Aby korzystać z nawigacji, musisz udostępnić swoją lokalizację. Po kliknięciu na przycisk poniżej będziesz miał ponownie możliwość jej udostępnienia.",
+  "@localizationAlertDescription": {
+    "description": "Opis alertu o lokalizacji."
+  },
+
+  "localizationAlertButton": "Przejdź dalej",
+  "@localizationAlertButton": {
+    "description": "Przycisk alertu o lokalizacji."
   }
 }
