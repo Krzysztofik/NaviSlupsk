@@ -76,17 +76,15 @@ class MapScreenState extends State<MapScreen>
   void _changeLanguage(String value) {
     setState(() {
       final globals = Globals();
-      globals.setLanguageCode(value); // Update the language code in globals
+      globals.setLanguageCode(value);
 
-      // Update the locale in the provider
       final localeProvider =
           Provider.of<LocaleProvider>(context, listen: false);
       Locale newLocale = Locale.fromSubtags(languageCode: value);
       print(
-          'User selected locale: ${newLocale.languageCode}'); // Log user selected locale
+          'User selected locale: ${newLocale.languageCode}');
       localeProvider.setLocale(newLocale);
 
-      // Save the selected language code to SharedPreferences
       SharedPreferences.getInstance().then((prefs) {
         prefs.setString('selectedLanguageCode', value);
       });
@@ -216,8 +214,8 @@ class MapScreenState extends State<MapScreen>
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         const begin =
-                            Offset(0.0, -1.0); // Start from the bottom
-                        const end = Offset.zero; // End at the current position
+                            Offset(0.0, -1.0);
+                        const end = Offset.zero;
                         const curve = Curves.easeInOut;
 
                         var tween = Tween(begin: begin, end: end)
@@ -302,8 +300,8 @@ class MapScreenState extends State<MapScreen>
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(0.0, -1.0); // Start from the bottom
-                    const end = Offset.zero; // End at the current position
+                    const begin = Offset(0.0, -1.0);
+                    const end = Offset.zero;
                     const curve = Curves.easeInOut;
 
                     var tween = Tween(begin: begin, end: end)
@@ -365,13 +363,13 @@ class MapScreenState extends State<MapScreen>
           blastDirectionality: BlastDirectionality.explosive,
           confettiController: confettiControllerSmall,
           numberOfParticles:
-              5, // Increase the number of particles for larger confetti
+              5, 
         ),
         ConfettiWidget(
           blastDirectionality: BlastDirectionality.explosive,
           confettiController: confettiControllerBig,
           numberOfParticles:
-              10, // Increase the number of particles for larger confetti
+              10,
         ),
       ],
     );
@@ -390,8 +388,8 @@ class MapScreenState extends State<MapScreen>
                     MapScreen(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(1.0, 0.0); // Start from the right
-                  const end = Offset.zero; // End at the current position
+                  const begin = Offset(1.0, 0.0); 
+                  const end = Offset.zero; 
                   const curve = Curves.easeInOut;
 
                   var tween = Tween(begin: begin, end: end)
@@ -417,8 +415,8 @@ class MapScreenState extends State<MapScreen>
                 ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(0.0, -1.0); // Start from the bottom
-                  const end = Offset.zero; // End at the current position
+                  const begin = Offset(0.0, -1.0); 
+                  const end = Offset.zero; 
                   const curve = Curves.easeInOut;
 
                   var tween = Tween(begin: begin, end: end)
@@ -485,8 +483,8 @@ class MapScreenState extends State<MapScreen>
           _currentUserLocation!.latitude,
           _currentUserLocation!.longitude,
         ),
-        zoom: 18, // Dostosuj zoom według potrzeb
-        tilt: 80, // Dostosuj tilt według potrzeb
+        zoom: 18, 
+        tilt: 80, 
       );
 
       // Ustaw początkową pozycję kamery
@@ -503,15 +501,14 @@ class MapScreenState extends State<MapScreen>
           (CompassEvent event) async {
             final double? heading = event.heading;
             if (heading != null) {
-              // Ustaw nową pozycję kamery
               final CameraPosition updatedPosition = CameraPosition(
                 target: LatLng(
                   _currentUserLocation!.latitude,
                   _currentUserLocation!.longitude,
                 ),
-                zoom: 18, // Dostosuj zoom według potrzeb
-                tilt: 80, // Dostosuj tilt według potrzeb
-                bearing: heading, // Ustaw bearing na wartość odczytu kompasu
+                zoom: 18,
+                tilt: 80, 
+                bearing: heading, 
               );
 
               // Animuj zoom w krótszym czasie
@@ -525,7 +522,6 @@ class MapScreenState extends State<MapScreen>
           },
           onDone: () {
             print('Compass stream closed');
-            // Przywróć poprzedni stan ikony po zakończeniu nasłuchiwania
           },
         );
       }
@@ -547,7 +543,6 @@ class MapScreenState extends State<MapScreen>
     final route = _routes.firstWhere((r) => r.id == _centeredRouteId);
     final totalMarkers = route.points.length;
 
-    // Debugowanie: Zaloguj każdy marker w liście
     for (var marker in route.points) {
       // Odczytaj stan odkrycia z SharedPreferences
       final prefs = await SharedPreferences.getInstance();
