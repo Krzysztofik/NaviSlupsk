@@ -3,10 +3,12 @@ import 'package:google_maps_app/models/route_model.dart';
 import 'package:google_maps_app/ui/app_bar_list.dart';
 
 class RouteListScreen extends StatelessWidget {
-  final List<RouteModel> routes; // Lista tras.
+  final List<RouteModel> routes;
+  final int expandedRouteId;
   const RouteListScreen({
     Key? key,
     required this.routes,
+    required this.expandedRouteId,
   }) : super(key: key);
 
   @override
@@ -22,6 +24,8 @@ class RouteListScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: ExpansionTile(
+              key: ValueKey(route.id),
+              initiallyExpanded: expandedRouteId == route.id,
               textColor: Colors.blueAccent,
               iconColor: Colors.blueAccent,
               title: Row(

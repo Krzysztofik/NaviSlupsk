@@ -13,14 +13,14 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:google_maps_app/services/polyline_maker.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:google_maps_app/providers/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_app/providers/locale_provider.dart';
-import 'package:google_maps_app/ui/custom_info_window.dart';
+import 'package:google_maps_app/ui/custom_info_window_check.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_maps_app/providers/audio_provider.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -100,6 +100,7 @@ class MapScreenState extends State<MapScreen>
 
   //MAPA GOOGLE
   Widget _buildMap() {
+    final audioState = Provider.of<AudioState>(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -121,7 +122,6 @@ class MapScreenState extends State<MapScreen>
               customInfoWindowController,
               context,
               isSoundEnabled,
-              _playSound,
               confettiControllerSmall,
               confettiControllerBig,
               _routes,
@@ -184,11 +184,13 @@ class MapScreenState extends State<MapScreen>
                 heroTag: null,
                 elevation: 0,
                 mini: true,
-                onPressed: toggleSound,
+                onPressed: () {
+                  audioState.toggleMute(); // Przełączamy stan dźwięku
+                },
                 child: Image.asset(
-                  isSoundEnabled
-                      ? 'assets/images/buttonicons/audio_on_icon.png'
-                      : 'assets/images/buttonicons/audio_off_icon.png',
+                  audioState.isMuted
+                      ? 'assets/images/buttonicons/audio_off_icon.png'
+                      : 'assets/images/buttonicons/audio_on_icon.png',
                 ),
                 backgroundColor: Colors.transparent,
               ),
@@ -286,6 +288,9 @@ class MapScreenState extends State<MapScreen>
             onNavigate: _navigate,
             onMarkerInfoUpdate: _updateMarkerInfo,
             onStop: _resetCameraToDefault,
+            locationPermissionGranted: _locationPermissionGranted,
+            showLocationPermissionDialog: () =>
+                _showLocationPermissionDialog(context),
             onListIconPressed: () {
               Navigator.push(
                 context,
@@ -293,6 +298,7 @@ class MapScreenState extends State<MapScreen>
                   pageBuilder: (context, animation, secondaryAnimation) =>
                       RouteListScreen(
                     routes: _routes,
+                    expandedRouteId: _centeredRouteId,
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
@@ -407,6 +413,7 @@ class MapScreenState extends State<MapScreen>
                 pageBuilder: (context, animation, secondaryAnimation) =>
                     RouteListScreen(
                   routes: _routes,
+                  expandedRouteId: _centeredRouteId,
                 ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
@@ -435,9 +442,44 @@ class MapScreenState extends State<MapScreen>
     customInfoWindowController.hideInfoWindow!();
   }
 
+  Future<void> _showLocationPermissionDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible:
+          false, // Użytkownik musi nacisnąć przycisk, aby zamknąć
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Brak uprawnień do lokalizacji'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text(
+                    'Aby korzystać z nawigacji, musisz udostępnić swoją lokalizację. Po kliknięciu na przycisk poniżej będziesz miał ponownie możliwość jej udostępnienia.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Przejdź dalej'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _requestLocationPermission();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   //FUNKCJA URUCHAMIAJĄCA "TRYB" NAWIGOWANIA
   Future<void> _navigate() async {
-    if (_locationPermissionGranted && _currentUserLocation != null) {
+    if (!_locationPermissionGranted) {
+      await _showLocationPermissionDialog(context); // Wyświetl powiadomienie
+      return;
+    }
+
+    if (_currentUserLocation != null) {
       // Zaktualizuj pozycję kamery z nowymi wartościami tilt i bearing
       final CameraPosition initialPosition = CameraPosition(
         target: LatLng(
@@ -488,12 +530,14 @@ class MapScreenState extends State<MapScreen>
           },
         );
       }
-      if (mounted)
+
+      if (mounted) {
         setState(() {
           isInfoVisible = true;
           isNavigationActive = true;
           userMarker = navigationMarker;
         });
+      }
 
       _checkMarkersInRange();
     }
@@ -549,8 +593,8 @@ class MapScreenState extends State<MapScreen>
       if (mounted)
         setState(() {
           _locationPermissionGranted = true;
-          _startLocationUpdates(); // Rozpocznij śledzenie lokalizacji
         });
+      _startLocationUpdates();
     } else {
       if (mounted)
         setState(() {
@@ -596,12 +640,11 @@ class MapScreenState extends State<MapScreen>
             });
 
           // Wyświetl okno informacyjne, jeśli marker jest w granicach widocznego regionu
-          showCustomInfoWindow(
+          showCustomInfoWindowCheck(
             marker,
             customInfoWindowController,
             context,
             isSoundEnabled,
-            _playSound,
             confettiControllerSmall,
             confettiControllerBig,
             _centeredRouteId,
@@ -709,27 +752,6 @@ class MapScreenState extends State<MapScreen>
   void toggleBottomMenu() {
     setState(() {
       isBottomMenuVisible = !isBottomMenuVisible;
-    });
-  }
-
-  //ZARZĄDZANIE AUDIO
-  final AudioPlayer _audioPlayer = AudioPlayer();
-
-  void _playSound(String soundFileName) async {
-    await _audioPlayer.play(AssetSource('$soundFileName'));
-  }
-
-  void _stopSound() async {
-    await _audioPlayer.stop(); // Zatrzymuje odtwarzanie
-  }
-
-  void toggleSound() {
-    setState(() {
-      isSoundEnabled = !isSoundEnabled;
-
-      if (!isSoundEnabled) {
-        _stopSound(); // Zatrzymuje dźwięk, gdy dźwięk jest wyłączony
-      }
     });
   }
 

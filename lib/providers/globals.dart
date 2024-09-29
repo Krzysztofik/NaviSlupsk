@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
   bool isInfoVisible = false;
   bool isNavigationActive = false;
   
+  
 
 class Globals with ChangeNotifier {
   static final Globals _instance = Globals._internal();

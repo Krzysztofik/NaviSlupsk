@@ -2,25 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/models/route_model.dart';
 import 'package:custom_info_window/custom_info_window.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:google_maps_app/providers/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_maps_app/ui/custom_info_window_check.dart';
 import 'package:google_maps_app/ui/custom_info_window.dart';
 import 'package:confetti/confetti.dart';
 
 late BitmapDescriptor defaultMarker; // Podstawowy marker.
 late BitmapDescriptor discoveredMarker; // Odkryty marker.
 late BitmapDescriptor navigationMarker; // Marker w trybie nawigacji.
-late BitmapDescriptor userMarker; // Marker użytkownika (gdy nie jest w trybie nawigacji).
-late BitmapDescriptor userMarkerDiff; // Podstawowy marker (używany do aktualizacji).
+late BitmapDescriptor
+    userMarker; // Marker użytkownika (gdy nie jest w trybie nawigacji).
+late BitmapDescriptor
+    userMarkerDiff; // Podstawowy marker (używany do aktualizacji).
 
-List<PointModel> markers = []; // Lista obiektów PointModel, czyli wszystkie markery dostępne.
-final AudioPlayer _audioPlayer = AudioPlayer(); // Odtwarzanie dźwięku, np. po kliknięciu na audio w markerze.
-
-// Funkcja odtwarzająca dźwięk.
-void _playSound(String soundFileName) async {
-  await _audioPlayer.play(AssetSource('$soundFileName'));
-}
+List<PointModel> markers =
+    []; // Lista obiektów PointModel, czyli wszystkie markery dostępne.
 
 // Ładuje wszystkie ikony markerów, pobiera trasy RouteMotel i tworzy listę punktów markers.
 Future<void> loadMarkers() async {
@@ -69,7 +66,6 @@ Set<Marker> buildMarkers(
   CustomInfoWindowController customInfoWindowController,
   BuildContext context,
   bool _isSoundEnabled,
-  Function(String) playSound,
   ConfettiController confettiControllerSmall,
   ConfettiController confettiControllerBig,
   List<RouteModel> _routes,
@@ -83,24 +79,36 @@ Set<Marker> buildMarkers(
     return Marker(
       markerId: MarkerId(marker.name),
       position: LatLng(marker.latitude, marker.longitude),
-      icon: marker.isDiscovered
-          ? discoveredMarker
-          : defaultMarker,
+      icon: marker.isDiscovered ? discoveredMarker : defaultMarker,
       onTap: () {
-        showCustomInfoWindow(
-          marker,
-          customInfoWindowController,
-          context,
-          isSoundEnabled,
-          _playSound,
-          confettiControllerSmall,
-          confettiControllerBig,
-          _centeredRouteId,
-          _routes,
-          _updateDiscoveryState,
-          _updateMarkerInfo,
-        );
-      },
+  if (marker.isDiscovered) {
+    // Show the custom info window for discovered markers
+    showCustomInfoWindowCheck(
+      marker,
+      customInfoWindowController,
+      context,
+      isSoundEnabled,
+      confettiControllerSmall,
+      confettiControllerBig,
+      _centeredRouteId,
+      _routes,
+      _updateDiscoveryState,
+      _updateMarkerInfo,
+    );
+  } else {
+    // Show the custom info window for undiscovered markers
+    showCustomInfoWindow(
+      marker,
+      customInfoWindowController,
+      context,
+      isSoundEnabled,
+      confettiControllerSmall,
+      confettiControllerBig,
+      _centeredRouteId,
+      _routes,
+    );
+  }
+},
     );
   }).toSet();
 }
@@ -138,7 +146,7 @@ class UserLocationMarker extends Marker {
                   ),
                 ),
               ),
-              position, 
+              position,
             );
           },
         );

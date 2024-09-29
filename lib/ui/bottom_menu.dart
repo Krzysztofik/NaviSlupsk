@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_app/models/route_model.dart';
 
 class BottomMenu extends StatefulWidget {
-  final void Function(int) onPageChanged; // Funkcja wywoływana, gdy zmienia się PageView.
+  final void Function(int)
+      onPageChanged; // Funkcja wywoływana, gdy zmienia się PageView.
   final bool isVisible; // Czy menu ma być widoczne? Domyślnie true.
-  final VoidCallback onHideInfoWindow; // Funkcja ukrywająca okienko nad markerem.
+  final VoidCallback
+      onHideInfoWindow; // Funkcja ukrywająca okienko nad markerem.
   final VoidCallback onNavigate; // Funkcja wywoływana po rozpoczęciu nawigacji.
-  final VoidCallback onMarkerInfoUpdate; // Funkcja wywoływana po aktualizacji info o markerze.
-  final VoidCallback onStop; // Funkcja wywoływana po zakończeniu nawigacji. // Liczba wszystkich markerów.
-  final VoidCallback onListIconPressed; // Funkcja wywoływana po naciśnięciu szczegółów trasy.
+  final VoidCallback
+      onMarkerInfoUpdate; // Funkcja wywoływana po aktualizacji info o markerze.
+  final VoidCallback
+      onStop; // Funkcja wywoływana po zakończeniu nawigacji. // Liczba wszystkich markerów.
+  final VoidCallback
+      onListIconPressed; // Funkcja wywoływana po naciśnięciu szczegółów trasy.
+  final bool locationPermissionGranted;
+  final VoidCallback showLocationPermissionDialog;
 
   const BottomMenu(
       {Key? key,
@@ -18,7 +25,9 @@ class BottomMenu extends StatefulWidget {
       required this.onNavigate,
       required this.onMarkerInfoUpdate,
       required this.onStop,
-      required this.onListIconPressed})
+      required this.onListIconPressed,
+      required this.locationPermissionGranted,
+      required this.showLocationPermissionDialog})
       : super(key: key);
 
   @override
@@ -27,7 +36,8 @@ class BottomMenu extends StatefulWidget {
 
 class _BottomMenuState extends State<BottomMenu> {
   List<RouteModel> menus = []; // Lista obiektów RouteModel, dostępne trasy.
-  final PageController _pageController = PageController(viewportFraction: 0.7); // Kontroler przewijania elementów w PageView.
+  final PageController _pageController = PageController(
+      viewportFraction: 0.7); // Kontroler przewijania elementów w PageView.
 
   bool isNavigating = true; // Flaga nawigacji (start/stop).
 
@@ -137,90 +147,80 @@ class _BottomMenuState extends State<BottomMenu> {
                           padding: const EdgeInsets.only(left: 0),
                           child: ElevatedButton(
                             onPressed: () {
-                              setState(() {
-                                if (isNavigating) {
-                                  widget
-                                      .onNavigate(); 
-                                } else {
-                                  widget.onStop(); 
-                                }
-                                isNavigating =
-                                    !isNavigating; 
-                              });
+                              if (widget.locationPermissionGranted) {
+                                // Sprawdź uprawnienia
+                                setState(() {
+                                  if (isNavigating) {
+                                    widget.onNavigate();
+                                  } else {
+                                    widget.onStop();
+                                  }
+                                  isNavigating = !isNavigating;
+                                });
+                              } else {
+                                widget.showLocationPermissionDialog();
+                              }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Colors.white, 
+                              backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    8), 
+                                borderRadius: BorderRadius.circular(8),
                                 side: BorderSide(
-                                  color: isNavigating
-                                      ? Colors.green
-                                      : Colors.red, 
-                                  width: 1, 
+                                  color:
+                                      isNavigating ? Colors.green : Colors.red,
+                                  width: 1,
                                 ),
                               ),
                               padding: EdgeInsets.symmetric(
                                 vertical: 5,
                                 horizontal: 18,
                               ),
-                              elevation: 3, 
-                              shadowColor: isNavigating
-                                  ? Colors.green
-                                  : Colors.red, 
+                              elevation: 3,
+                              shadowColor:
+                                  isNavigating ? Colors.green : Colors.red,
                             ),
                             child: Text(
-                              isNavigating
-                                  ? 'Start'
-                                  : 'Stop', 
+                              isNavigating ? 'Start' : 'Stop',
                               style: TextStyle(
-                                color: isNavigating
-                                    ? Colors.green
-                                    : Colors.red, 
+                                color: isNavigating ? Colors.green : Colors.red,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 10), 
+                        SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () {
-                            widget
-                                .onListIconPressed(); 
+                            widget.onListIconPressed();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors
-                                .white, 
+                            backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  8), 
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide(
-                                color: Colors
-                                    .blue,
-                                width: 1, 
+                                color: Colors.blue,
+                                width: 1,
                               ),
                             ),
                             padding: EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 18,
                             ),
-                            elevation: 3, 
-                            shadowColor: Colors.blueAccent, 
+                            elevation: 3,
+                            shadowColor: Colors.blueAccent,
                           ),
                           child: Text(
-                            'Info', 
+                            'Info',
                             style: TextStyle(
-                              color: Colors
-                                  .blue, 
+                              color: Colors.blue,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
