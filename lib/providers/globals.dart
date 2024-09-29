@@ -3,8 +3,7 @@ library globals;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-bool isSoundEnabled = true;
-
+  bool isSoundEnabled = true;
   bool isBottomMenuVisible = true;
   bool isInfoVisible = false;
   bool isNavigationActive = false;
@@ -16,7 +15,7 @@ class Globals with ChangeNotifier {
 
   Globals._internal();
   
-  String languageCode = 'pl'; // default language code
+  String languageCode = 'pl';
   // ignore: unused_element
   String get _languageCode => languageCode;
   Future<void> loadLanguageCode() async {
@@ -30,8 +29,8 @@ class Globals with ChangeNotifier {
   }
 
   void setLanguageCode(String newLanguageCode) {
-  languageCode = newLanguageCode; // This should be the class variable
-  print('Language code set to: $languageCode'); // Log language code setting
+  languageCode = newLanguageCode;
+  print('Language code set to: $languageCode');
   notifyListeners();
 }
 }

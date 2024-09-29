@@ -32,16 +32,6 @@ class PolylineService {
   }
 }
 
-  // Metoda obliczająca odległość między dwoma punktami przy użyciu Geolocator.
-  Future<double> calculateDistance(LatLng origin, LatLng destination) async {
-    return Geolocator.distanceBetween(
-      origin.latitude,
-      origin.longitude,
-      destination.latitude,
-      destination.longitude,
-    );
-  }
-
   // Funkcja usuwająca zduplikowane punkty trasy.
   // Jeżeli punkty są zbyt blisko siebie (np. 10 metrów), jeden z nich jest usuwany.
   List<LatLng> _removeDuplicatePoints(List<LatLng> points, {double thresholdInMeters = 10}) {

@@ -3,16 +3,14 @@ import 'package:google_maps_app/pages/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatelessWidget {
-  final bool fromWelcome; // Dodanie parametru informującego o pochodzeniu ekranu
+  final bool fromWelcome;
 
   OnboardingScreen({required this.fromWelcome});
 
   @override
   Widget build(BuildContext context) {
-    // Accessing localization strings
     final localization = AppLocalizations.of(context)!;
 
-    // Map data with localized titles and descriptions
     final List<Map<String, dynamic>> mapData = [
       {
         'image': 'assets/images/markers/default_marker.png',
@@ -59,32 +57,31 @@ class OnboardingScreen extends StatelessWidget {
       },
     ];
 
-    // Updated menuButtonData with buttons instead of images
     final List<Map<String, dynamic>> menuButtonData = [
       {
         'button': ElevatedButton(
           onPressed: () {
           },
           style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-              color: Colors.green, // Kolor obramowania
-              width: 1, // Grubość obramowania
+              color: Colors.green,
+              width: 1,
             ),
           ),
           padding: EdgeInsets.symmetric(
             vertical: 5,
             horizontal: 18,
           ),
-          elevation: 3, // Efekt podniesienia
-          shadowColor:Colors.green, // Kolor cienia
+          elevation: 3,
+          shadowColor:Colors.green,
         ),
           child: Text(
-          'Start', // Tekst przycisku
+          'Start', 
           style: TextStyle(
-            color: Colors.green, // Kolor tekstu
+            color: Colors.green, 
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -98,25 +95,25 @@ class OnboardingScreen extends StatelessWidget {
           onPressed: () {
           },
           style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-              color: Colors.red, // Kolor obramowania
-              width: 1, // Grubość obramowania
+              color: Colors.red,
+              width: 1, 
             ),
           ),
           padding: EdgeInsets.symmetric(
             vertical: 5,
             horizontal: 18,
           ),
-          elevation: 3, // Efekt podniesienia
-          shadowColor:Colors.red, // Kolor cienia
+          elevation: 3,
+          shadowColor:Colors.red, 
         ),
           child: Text(
-          'Stop', // Tekst przycisku
+          'Stop', 
           style: TextStyle(
-            color: Colors.red, // Kolor tekstu
+            color: Colors.red, 
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -130,25 +127,25 @@ class OnboardingScreen extends StatelessWidget {
           onPressed: () {
           },
           style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, // Białe wypełnienie przycisku
+          backgroundColor: Colors.white, 
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Mniejsze zaokrąglone rogi
+            borderRadius: BorderRadius.circular(8), 
             side: BorderSide(
-              color: Colors.blue, // Kolor obramowania
-              width: 1, // Grubość obramowania
+              color: Colors.blue, 
+              width: 1, 
             ),
           ),
           padding: EdgeInsets.symmetric(
             vertical: 5,
             horizontal: 18,
           ),
-          elevation: 3, // Efekt podniesienia
-          shadowColor:Colors.blue, // Kolor cienia
+          elevation: 3, 
+          shadowColor:Colors.blue,
         ),
           child: Text(
           'Info', // Tekst przycisku
           style: TextStyle(
-            color: Colors.blue, // Kolor tekstu
+            color: Colors.blue,
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -196,10 +193,9 @@ class OnboardingScreen extends StatelessWidget {
             }).toList(),
             const SizedBox(height: 20),
             SectionHeader(title: localization.menuSection),
-            // Updated rendering logic for buttons
             ...menuButtonData.map((data) {
               return OnboardingItem(
-                button: data['button'], // Passing the button widget
+                button: data['button'],
                 title: data['title'],
                 description: data['description'],
               );
@@ -245,7 +241,7 @@ class OnboardingScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MapScreen()),
                   );
                 } else {
-                  Navigator.of(context).pop(); // Powrót do poprzedniego ekranu
+                  Navigator.of(context).pop();
                 }
               },
               child: Text(
@@ -277,10 +273,10 @@ class OnboardingScreen extends StatelessWidget {
   }
 }
 
-// Define the OnboardingItem widget
+
 class OnboardingItem extends StatelessWidget {
-  final String? imagePath; // Optional imagePath
-  final Widget? button; // Optional button widget
+  final String? imagePath; 
+  final Widget? button; 
   final String title;
   final String description;
 
@@ -303,7 +299,7 @@ class OnboardingItem extends StatelessWidget {
               width: 50,
               height: 50,
             ),
-          if (button != null) button!, // Display button if available
+          if (button != null) button!, 
           const SizedBox(width: 20),
           Expanded(
             child: Column(
@@ -335,8 +331,6 @@ class OnboardingItem extends StatelessWidget {
 }
 
 
-
-// Define the SectionHeader widget
 class SectionHeader extends StatelessWidget {
   final String title;
 

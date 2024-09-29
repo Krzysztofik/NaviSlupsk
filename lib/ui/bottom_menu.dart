@@ -7,9 +7,7 @@ class BottomMenu extends StatefulWidget {
   final VoidCallback onHideInfoWindow; // Funkcja ukrywająca okienko nad markerem.
   final VoidCallback onNavigate; // Funkcja wywoływana po rozpoczęciu nawigacji.
   final VoidCallback onMarkerInfoUpdate; // Funkcja wywoływana po aktualizacji info o markerze.
-  final VoidCallback onStop; // Funkcja wywoływana po zakończeniu nawigacji.
-  final int discoveredMarkers; // Liczba odkrytych markerów.
-  final int totalMarkers; // Liczba wszystkich markerów.
+  final VoidCallback onStop; // Funkcja wywoływana po zakończeniu nawigacji. // Liczba wszystkich markerów.
   final VoidCallback onListIconPressed; // Funkcja wywoływana po naciśnięciu szczegółów trasy.
 
   const BottomMenu(
@@ -20,8 +18,6 @@ class BottomMenu extends StatefulWidget {
       required this.onNavigate,
       required this.onMarkerInfoUpdate,
       required this.onStop,
-      required this.discoveredMarkers,
-      required this.totalMarkers,
       required this.onListIconPressed})
       : super(key: key);
 

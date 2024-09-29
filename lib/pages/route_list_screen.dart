@@ -4,18 +4,9 @@ import 'package:google_maps_app/ui/app_bar_list.dart';
 
 class RouteListScreen extends StatelessWidget {
   final List<RouteModel> routes; // Lista tras.
-  final int? initialRouteId; // Identyfikator początkowej trasy.
-  final int? selectedPointId; // Identyfikator wybranego punktu trasy.
-  final int discoveredMarkers; // Liczba odkrytych markerów.
-  final int totalMarkers; // Całkowita liczba markerów.
-
   const RouteListScreen({
     Key? key,
     required this.routes,
-    this.initialRouteId,
-    this.selectedPointId,
-    required this.discoveredMarkers,
-    required this.totalMarkers,
   }) : super(key: key);
 
   @override
@@ -28,11 +19,9 @@ class RouteListScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final route = routes[index];
           final points = route.points;
-
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: ExpansionTile(
-              initiallyExpanded: route.id == initialRouteId,
               textColor: Colors.blueAccent,
               iconColor: Colors.blueAccent,
               title: Row(
@@ -53,14 +42,12 @@ class RouteListScreen extends StatelessWidget {
               ),
               children: [
                 ...points.map((point) {
-                  final isSelected = point.id == selectedPointId;
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        tileColor: isSelected ? Colors.blueAccent : null,
                         title: Row(
                           children: [
                             SizedBox(

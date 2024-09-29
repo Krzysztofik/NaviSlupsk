@@ -36,8 +36,6 @@ class MapScreenState extends State<MapScreen>
   late ConfettiController confettiControllerBig;
 
   int _centeredRouteId = 1;
-  int _discoveredMarkers = 0;
-  int _totalMarkers = 0;
 
   String _navigationInfo = "";
   StreamSubscription<CompassEvent>? _compassSubscription;
@@ -288,8 +286,6 @@ class MapScreenState extends State<MapScreen>
             onNavigate: _navigate,
             onMarkerInfoUpdate: _updateMarkerInfo,
             onStop: _resetCameraToDefault,
-            discoveredMarkers: _discoveredMarkers,
-            totalMarkers: _totalMarkers,
             onListIconPressed: () {
               Navigator.push(
                 context,
@@ -297,8 +293,6 @@ class MapScreenState extends State<MapScreen>
                   pageBuilder: (context, animation, secondaryAnimation) =>
                       RouteListScreen(
                     routes: _routes,
-                    discoveredMarkers: _discoveredMarkers,
-                    totalMarkers: _totalMarkers,
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
@@ -413,8 +407,6 @@ class MapScreenState extends State<MapScreen>
                 pageBuilder: (context, animation, secondaryAnimation) =>
                     RouteListScreen(
                   routes: _routes,
-                  discoveredMarkers: _discoveredMarkers,
-                  totalMarkers: _totalMarkers,
                 ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
@@ -524,8 +516,6 @@ class MapScreenState extends State<MapScreen>
     final discoveredMarkers = route.points.where((p) => p.isDiscovered).length;
     if (mounted)
       setState(() {
-        _discoveredMarkers = discoveredMarkers; // Zaktualizuj discoveredMarkers
-        _totalMarkers = totalMarkers; // Zaktualizuj totalMarkers
         _navigationInfo =
             "${route.name}, ${AppLocalizations.of(context)!.discovered} $discoveredMarkers/$totalMarkers ${AppLocalizations.of(context)!.places}!";
       });
@@ -547,7 +537,6 @@ class MapScreenState extends State<MapScreen>
             _currentUserLocation = position;
           });
         _updatePolylines();
-        
         _checkMarkersInRange();
       });
     }

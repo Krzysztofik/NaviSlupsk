@@ -56,38 +56,23 @@ class RouteModel {
     required this.points,
   });
 
-  
-
   static Future<List<RouteModel>> getRoutes() async {
     try {
-
       final globals = Globals();
       String languageCode = globals.languageCode;
-
       final storageRef = FirebaseStorage.instance.ref();
       String routeRefPath;
 
       if (languageCode == 'pl') {
-
         routeRefPath = 'routes.json';
-
-        print('POLSKI JSON');
-
       } else if (languageCode == 'en') {
-
         routeRefPath = 'routes_en.json';
-
-        print('ANGIELSKI JSON');
-
       } else {
-
         throw Exception('Unsupported language code: $languageCode');
-
       }
-      final routeRef = storageRef.child(routeRefPath); // Ścieżka do pliku w Firebase Storage
+      final routeRef = storageRef.child(routeRefPath);
       final url = await routeRef.getDownloadURL();
 
-      // Pobierz dane z URL
       final response = await http.get(Uri.parse(url));
       
       if (response.statusCode != 200) {
