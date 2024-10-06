@@ -1,6 +1,6 @@
 import 'dart:async'; // Dodaj import dla StreamSubscription
 import 'package:flutter/material.dart';
-import 'package:google_maps_app/pages/boarding_screen.dart';
+import 'package:google_maps_app/pages/help_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_app/ui/app_bar.dart';
 import 'package:google_maps_app/ui/bottom_menu.dart';
@@ -210,7 +210,7 @@ class MapScreenState extends State<MapScreen>
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          OnboardingScreen(fromWelcome: false),
+                          HelpScreen(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         const begin =

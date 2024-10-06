@@ -69,7 +69,7 @@
     "description": "Opis ikony na mapie"
   },
 
-  "naviTitle": "Twoja ikona podczas nawigacji",
+  "naviTitle": "Ikona podczas nawigacji",
   "@naviTitle": {
     "description": "Tytuł ikony podczas nawigacji"
   },
@@ -97,6 +97,26 @@
   "audioOnDescription": "Dźwięk w aplikacji jest włączony.",
   "@audioOnDescription": {
     "description": "Opis audio on"
+  },
+
+  "helpTitle": "Przycisk pomocy",
+  "@helpTitle": {
+    "description": "Tytuł help."
+  },
+
+  "helpDescription": "Po kliknięciu w ten przycisk przejdziesz do ekranu pomocy ze wszystkimi niezbędnymi informacjami.",
+  "@helpDescription": {
+    "description": "Opis help"
+  },
+
+  "languageTitle": "Przycisk zmiany języka",
+  "@languageTitle": {
+    "description": "Tytuł języka."
+  },
+
+  "languageDescription": "Po kliknięciu zobaczysz możliwe do wyboru języki aplikacji.",
+  "@languageDescription": {
+    "description": "Opis języka."
   },
 
   "menuTitle": "Przycisk menu",
@@ -171,6 +191,11 @@
 
   "startButton": "Rozpocznij",
   "@startButton": {
+    "description": "Przycisk onboardingu."
+  },
+
+  "backButton": "Wróć",
+  "@backButtonButton": {
     "description": "Przycisk onboardingu."
   },
 

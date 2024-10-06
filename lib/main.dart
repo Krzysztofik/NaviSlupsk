@@ -12,11 +12,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Wykonanie kodu asynchronicznego przed uruchomieniem aplikacji.
   await Firebase.initializeApp(); // Inicjalizacja Firebase przed uruchomieniem aplikacji
 
-  // Ustawienie koloru dolnego paska nawigacji i jasności ikon w systemie.
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.white,
-  ));
-
   // Globalne zmienne i ładowanie zapisanego wcześniej kodu języka.
   final globals = Globals();
   await globals.loadLanguageCode();

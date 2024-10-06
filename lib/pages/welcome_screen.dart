@@ -106,7 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     context,
     PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
-        return _isFirstLaunch ? OnboardingScreen(fromWelcome: true) : MapScreen();
+        return _isFirstLaunch ? OnboardingScreen() : MapScreen();
       },
       transitionDuration: const Duration(milliseconds: 300),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
